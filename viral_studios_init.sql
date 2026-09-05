@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS public.viral_generation_logs (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 5. Insert initial Sano & Punto framework data
+-- 5. Insert initial Salud & Organos 3D framework data
 INSERT INTO public.viral_frameworks (
     id, name, category, badge, description, image_generation_mode, image_model, video_model, default_scene_duration, requires_spoken_script
 ) VALUES 

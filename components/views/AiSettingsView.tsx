@@ -8,7 +8,7 @@ export const AiSettingsView: React.FC = () => {
   const [keys, setKeys] = useState({
     nanoBananaKey: '',
     googleVertexKey: '',
-    supabaseUrl: 'https://skilgzmiryzcvumanlvb.supabase.co',
+    supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://tu-proyecto.supabase.co',
     supabaseAnonKey: '',
     elevenLabsKey: '',
   });
@@ -103,7 +103,7 @@ export const AiSettingsView: React.FC = () => {
             <div className="flex items-center justify-between">
               <label className="text-xs font-semibold text-gray-800 flex items-center gap-2">
                 <Database className="w-3.5 h-3.5 text-slate-700" />
-                <span>Supabase Database (Viral Studios: skilgzmiryzcvumanlvb)</span>
+                <span>Supabase Database (Servicio Cloud Conectado)</span>
               </label>
               <span className="text-[10px] font-semibold text-purple-800 bg-purple-50 px-2 py-0.5 rounded border border-purple-200">
                 Conectado & Migrado

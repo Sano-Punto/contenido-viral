@@ -5,7 +5,7 @@ import {
   SUPER_ALIMENTOS_CATALOG,
   ALIMENTOS_QUE_RETAN_CATALOG,
   QUE_SUCEDE_AL_COMER_CATALOG,
-} from '@/lib/frameworks/sanoYPuntoData';
+} from '@/lib/frameworks/organCatalogData';
 
 interface ScriptGenerationParams {
   framework: ViralFramework;

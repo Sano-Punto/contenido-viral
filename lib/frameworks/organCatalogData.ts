@@ -1,4 +1,4 @@
-export interface SanoYPuntoPreset {
+export interface OrganFrameworkPreset {
   id: 'super-alimentos' | 'alimentos-que-retan' | 'que-sucede-al-comer';
   name: string;
   tagline: string;
@@ -11,7 +11,7 @@ export interface SanoYPuntoPreset {
   defaultScenesCount: number;
 }
 
-export const SANO_Y_PUNTO_PRESETS: Record<string, SanoYPuntoPreset> = {
+export const ORGAN_FRAMEWORK_PRESETS: Record<string, OrganFrameworkPreset> = {
   'super-alimentos': {
     id: 'super-alimentos',
     name: 'Super Alimentos para tu Órgano',
