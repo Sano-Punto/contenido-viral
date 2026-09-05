@@ -8,6 +8,7 @@ import { ArrowLeft, ArrowRight, RefreshCw, Clock, Image as ImageIcon, Sparkles, 
 export const Step4Storyboard: React.FC = () => {
   const { project, frameworks, updateScene, setStep } = useSystemStore();
   const [regeneratingIds, setRegeneratingIds] = useState<Record<string, boolean>>({});
+  const [isCascading, setIsCascading] = useState(false);
 
   const selectedFw = frameworks.find((f) => f.id === project.frameworkId) || frameworks[0];
   const requiresScript = selectedFw.requiresSpokenScript ?? true;
@@ -29,12 +30,28 @@ export const Step4Storyboard: React.FC = () => {
   const handleRegenerateImage = async (sceneId: string, prompt: string) => {
     setRegeneratingIds((prev) => ({ ...prev, [sceneId]: true }));
     try {
-      const newMediaUrl = await regenerateSceneVisual(prompt);
+      const newMediaUrl = await regenerateSceneVisual(prompt, selectedFw.id);
       updateScene(sceneId, { mediaUrl: newMediaUrl });
     } catch (err) {
       console.error(err);
     } finally {
       setRegeneratingIds((prev) => ({ ...prev, [sceneId]: false }));
+    }
+  };
+
+  const handleCascadeRegenerate = async () => {
+    if (project.scenes.length === 0 || isCascading) return;
+    setIsCascading(true);
+    try {
+      const masterPrompt = project.scenes[0]?.visualPrompt || project.ideaPrompt || '3D Pixar character';
+      const newMediaUrl = await regenerateSceneVisual(masterPrompt, selectedFw.id);
+      project.scenes.forEach((scene) => {
+        updateScene(scene.id, { mediaUrl: newMediaUrl });
+      });
+    } catch (err) {
+      console.error('Error al regenerar en cascada:', err);
+    } finally {
+      setIsCascading(false);
     }
   };
 
@@ -80,10 +97,12 @@ export const Step4Storyboard: React.FC = () => {
           </div>
           <button
             type="button"
-            className="shrink-0 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold rounded-lg transition-colors flex items-center gap-1.5 shadow-sm"
+            disabled={isCascading}
+            onClick={handleCascadeRegenerate}
+            className="shrink-0 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold rounded-lg transition-colors flex items-center gap-1.5 shadow-sm disabled:opacity-50"
           >
-            <RefreshCw className="w-3 h-3" />
-            Regenerar en cascada
+            <RefreshCw className={`w-3 h-3 ${isCascading ? 'animate-spin' : ''}`} />
+            {isCascading ? 'Generando...' : 'Regenerar en cascada'}
           </button>
         </div>
       )}
