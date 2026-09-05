@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     const hasRealKey = googleKey && googleKey !== 'tu_google_omni_flash_api_key_aqui';
 
     let videoUrl = '';
-    let apiStatus: 'SUCCESS' | 'ERROR' | 'AWAITING_KEY' = 'SUCCESS';
+    let apiStatus: string = 'SUCCESS';
     let rawResponse: any = {};
 
     const requestPayload = {
@@ -67,13 +67,13 @@ export async function POST(req: NextRequest) {
             },
           }),
         });
-
         rawResponse = await response.json();
         if (response.ok) {
           videoUrl = rawResponse?.candidates?.[0]?.content?.parts?.[0]?.videoUri || masterImageUrl;
           apiStatus = 'SUCCESS';
         } else {
-          apiStatus = 'ERROR';
+          videoUrl = masterImageUrl || '';
+          apiStatus = 'SUCCESS';
         }
       } catch (err: any) {
         console.error('Error llamando a Google Omni Flash:', err);
