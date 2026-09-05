@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-sans antialiased text-[#1f1f2e] bg-[#f6f3eb] selection:bg-[#1e293b] selection:text-white;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans font-bold text-[#14141e];
+  }
+}
+
+@layer utilities {
+  /* Gradiente plateado cromado de alto brillo para textos en modo claro */
+  .text-silver-gradient {
+    background: linear-gradient(135deg, #1e293b 0%, #475569 40%, #94a3b8 70%, #334155 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Gradiente plateado líquido brillante con reflejo platino */
+  .text-silver-shine {
+    background: linear-gradient(135deg, #0f172a 0%, #334155 35%, #64748b 60%, #94a3b8 85%, #1e293b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* GRADIENTE SILVER METÁLICO INTENSO PARA FONDOS OSCUROS (SIDEBAR / LOGOS) */
+  .text-silver-metallic {
+    background: linear-gradient(120deg, #ffffff 0%, #e2e8f0 20%, #8590a6 45%, #cbd5e1 70%, #ffffff 90%, #64748b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+  }
+
+  /* 1. BOTÓN PRINCIPAL TITANIO OSCURO (OBSIDIAN TITANIUM LUXURY) */
+  .btn-dark-luxury {
+    background: linear-gradient(180deg, #1e222d 0%, #11131a 100%);
+    border: 1px solid #3d4354;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    font-weight: 600;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn-dark-luxury:hover {
+    background: linear-gradient(180deg, #2a3040 0%, #171a24 100%);
+    border-color: #64748b;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+    color: #ffffff;
+  }
+
+  .btn-dark-luxury:active {
+    transform: translateY(0) scale(0.98);
+    background: #0f1117;
+  }
+
+  /* 2. BOTÓN SECUNDARIO PLATEADO LUMINOSO (LIQUID SILVER / CHROME) */
+  .btn-silver-luxury {
+    background: linear-gradient(180deg, #ffffff 0%, #eef2f6 30%, #d8e0e9 60%, #b8c4d2 100%);
+    border: 1px solid #94a3b8;
+    box-shadow: 0 2px 6px rgba(100, 116, 139, 0.2), inset 0 1px 1px #ffffff, inset 0 -1px 1px rgba(148, 163, 184, 0.4);
+    color: #0f172a;
+    font-weight: 600;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn-silver-luxury:hover {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 30%, #e2e8f0 60%, #cbd5e1 100%);
+    border-color: #64748b;
+    box-shadow: 0 4px 12px rgba(71, 85, 105, 0.28), inset 0 1px 2px #ffffff;
+    transform: translateY(-1px);
+    color: #020617;
+  }
+
+  .btn-silver-luxury:active {
+    transform: translateY(0) scale(0.98);
+    background: linear-gradient(180deg, #d8e0e9 0%, #c4d0de 50%, #b0bece 100%);
+  }
+
+  /* 3. BOTÓN NEUTRO / RETORNO (WHITE ARENA) */
+  .btn-arena {
+    background: #ffffff;
+    border: 1px solid #ded7c8;
+    color: #374151;
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+  }
+
+  .btn-arena:hover {
+    background: #ede8dc;
+    border-color: #c8c0b0;
+    color: #111827;
+  }
+
+  /* 4. TARJETA SELECCIONADA CON BRILLO SILVER LUMINOSO */
+  .silver-selected {
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    border-color: #94a3b8 !important;
+    box-shadow: 0 2px 8px rgba(148, 163, 184, 0.25), inset 0 0 0 1px rgba(148, 163, 184, 0.5);
+  }
+}
+
+/* Custom modern scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #ede8dc;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c8c0b0;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a89f8d;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
+}
