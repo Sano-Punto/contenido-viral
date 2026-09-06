@@ -38,7 +38,7 @@ function LoginForm() {
   };
 
   return (
-    <div className="w-full bg-[#0a0a0a] border border-slate-800 rounded-3xl p-8 shadow-2xl relative">
+    <div className="w-full bg-[#0a0a0a] border border-slate-800 rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-2xl relative">
       <div className="absolute inset-0 bg-gradient-to-b from-slate-800/10 to-transparent rounded-3xl pointer-events-none" />
       
       <form onSubmit={handleLogin} className="space-y-6 relative z-10">

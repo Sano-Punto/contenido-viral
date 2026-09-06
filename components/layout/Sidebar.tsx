@@ -12,6 +12,7 @@ import {
   TrendingUp,
   X,
   Activity,
+  LogOut,
 } from 'lucide-react';
 
 interface MenuItem {
@@ -120,9 +121,24 @@ export const Sidebar: React.FC = () => {
         </nav>
       </div>
 
-      {/* Footer del Sidebar */}
-      <div className="p-4 border-t border-[#1c1e26] text-[11px] text-gray-500 text-center">
-        Viral Studios v1.0
+      {/* Footer del Sidebar con botón de Cerrar Sesión */}
+      <div className="p-4 border-t border-[#1c1e26] space-y-2">
+        <button
+          type="button"
+          onClick={async () => {
+            const { createClient } = await import('@/lib/supabase/client');
+            const supabase = createClient();
+            await supabase.auth.signOut();
+            window.location.href = '/login';
+          }}
+          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-red-400 hover:bg-red-950/20 transition-all group border border-transparent hover:border-red-900/30"
+        >
+          <LogOut className="w-3.5 h-3.5 group-hover:text-red-400" />
+          <span>Cerrar Sesión</span>
+        </button>
+        <div className="text-[10px] text-gray-600 text-center">
+          Viral Studios v1.0 • Acceso Seguro
+        </div>
       </div>
     </div>
   );
