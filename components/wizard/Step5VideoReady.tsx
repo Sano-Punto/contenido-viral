@@ -20,7 +20,7 @@ import {
 import confetti from 'canvas-confetti';
 
 export const Step5VideoReady: React.FC = () => {
-  const { project, setStep, setActiveView, resetProject } = useSystemStore();
+  const { project, setStep, setActiveView, resetProject, updateScene } = useSystemStore();
   const playerRef = useRef<PlayerRef>(null);
 
   const [isProcessing, setIsProcessing] = useState(true);
@@ -35,7 +35,7 @@ export const Step5VideoReady: React.FC = () => {
   const totalDurationSec = scenes.reduce((acc, s) => acc + s.durationSec, 0) || 32;
   const totalDurationFrames = Math.max(totalDurationSec * fps, 30);
 
-  // Procesamiento REAL escena por escena llamando al orquestador de Google Omni Flash
+  // Procesamiento REAL escena por escena llamando a Google Veo 3.1
   useEffect(() => {
     let isCancelled = false;
 
@@ -48,8 +48,14 @@ export const Step5VideoReady: React.FC = () => {
         setCurrentSceneProcessing(i + 1);
 
         try {
-          // LLAMADA REAL A LA API DE VIDEO (Google Omni Flash)
-          await renderSceneVideo(currentScene, project.frameworkId, currentScene.mediaUrl);
+          // LLAMADA REAL A LA API DE VIDEO (Google Veo 3.1)
+          const videoResult = await renderSceneVideo(currentScene, project.frameworkId, currentScene.mediaUrl);
+          if (videoResult.videoUrl && (videoResult.videoUrl.includes('video-proxy') || videoResult.videoUrl.endsWith('.mp4'))) {
+            updateScene(currentScene.id, {
+              mediaUrl: videoResult.videoUrl,
+              mediaType: 'video',
+            });
+          }
         } catch (err) {
           console.warn(`Aviso: renderizado de escena ${i + 1} completado con aviso:`, err);
         }
@@ -138,18 +144,18 @@ export const Step5VideoReady: React.FC = () => {
               <h3 className="text-lg font-bold text-gray-900">
                 Generando video con{' '}
                 <span className="font-serif italic font-semibold text-silver-shine">
-                  Google Omni Flash
+                  IA Cinemática
                 </span>
               </h3>
               <p className="text-xs text-gray-500">
-                Procesando escena {currentSceneProcessing} de {scenes.length} (comprobando modelo oficial gemini-omni-flash-preview y enviando video control prompts)...
+                Procesando escena {currentSceneProcessing} de {scenes.length} (renderizando animación 3D y movimiento de cámara)...
               </p>
             </div>
 
             {/* Barra de progreso */}
             <div className="space-y-1.5 pt-2">
               <div className="flex items-center justify-between text-[11px] font-semibold text-slate-700">
-                <span>Ensamblaje Remotion 9:16 & Google Omni Flash</span>
+                <span>Composición vertical 9:16 & animación</span>
                 <span>{processingProgress}%</span>
               </div>
               <div className="w-full h-2 bg-[#f0ebe0] rounded-full overflow-hidden border border-[#ded7c8]">

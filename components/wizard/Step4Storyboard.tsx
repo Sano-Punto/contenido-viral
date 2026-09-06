@@ -83,29 +83,7 @@ export const Step4Storyboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Banner de Imagen Maestra Única para Frameworks Especiales */}
-      {(selectedFw.id === 'super-alimentos' || selectedFw.id === 'alimentos-que-retan') && (
-        <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-              <ImageIcon className="w-4 h-4 text-emerald-600" />
-            </div>
-            <div>
-              <div className="text-xs font-bold text-emerald-900">🖼️ Imagen Maestra Única (gemini-3-pro-image · Nano Banana Pro)</div>
-              <div className="text-[10px] text-emerald-700 font-medium">1 sola llamada a la API propaga la imagen base 3D a todas las escenas.</div>
-            </div>
-          </div>
-          <button
-            type="button"
-            disabled={isCascading}
-            onClick={handleCascadeRegenerate}
-            className="shrink-0 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold rounded-lg transition-colors flex items-center gap-1.5 shadow-sm disabled:opacity-50"
-          >
-            <RefreshCw className={`w-3 h-3 ${isCascading ? 'animate-spin' : ''}`} />
-            {isCascading ? 'Generando...' : 'Regenerar en cascada'}
-          </button>
-        </div>
-      )}
+
 
       {/* Grid de Escenas del Storyboard */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

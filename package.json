@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@remotion/player": "^4.0.220",
+    "@supabase/ssr": "^0.12.6",
     "@supabase/supabase-js": "^2.45.6",
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",

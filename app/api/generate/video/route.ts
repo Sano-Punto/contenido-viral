@@ -31,84 +31,69 @@ export async function POST(req: NextRequest) {
     let apiStatus: string = 'SUCCESS';
     let rawResponse: any = {};
 
-    // Construir el prompt estructurado rico y variable para la IA de video
-    const fullVideoPrompt = `Crea un video animado para la Escena ${sceneOrder} (${sceneTitle || 'Alimento ' + sceneOrder}):
-* Concepto Visual: ${conceptVisual || videoControlPrompt || 'Interacción de alimentación y curación 3D'}
-* Prompt IA Base: ${visualPrompt || 'Pixar style 3D character in soft biological cavity'}
-* Movimiento de Cámara: ${cameraMovement || (sceneOrder === 1 ? 'Toma macro frontal dinámica con zoom push-in' : 'Toma macro frontal estable')}
-* Efectos de Sonido / ASMR: ${asmrFx || '¡Crunch-crunch! 🍎 | ¡Shiing! ✨'}
-* Locución: ${voiceoverText || 'Sin locución'}
-* 📹 Control de Video:
-  - ${videoControlPrompt || 'Hand enters slowly feeding the organ. Organ chews slowly then radiates glowing health aura.'}
-  - La mano humana entra despacio y alimenta al personaje directamente en la boca.
-  - El método de entrega del alimento coincide con el formato de consumo.
-  - El personaje mastica lentamente antes de mostrar la reacción positiva de brillo o sonrisa.
-  - El aspecto del órgano no puede alterarse drásticamente; reaccionar con ojos felices sin deformar su estructura base.
-  - Sin texto en pantalla.
-  - Sin voces ni conversaciones, a menos que haya locución establecida.
-  - El movimiento de la cámara debe ser fluido y estable. Duración: ${durationSec}s. Formato 9:16 vertical.`;
+    // Prompt de video optimizado para Veo 3.1
+    const veoPrompt = `${visualPrompt || 'Cute 3D Pixar character inside soft anatomical biological cavity'}. ${videoControlPrompt || 'Hand enters slowly feeding the character. Character chews happily and glows with vibrant energy'}. Camera: ${cameraMovement || 'Smooth cinematic push-in'}. 8k, Unreal Engine 5 render, cinematic lighting. No text.`;
 
     const requestPayload = {
-      model,
+      model: 'veo-3.1-fast-generate-preview',
       framework_id: frameworkId,
       scene_id: sceneId,
       scene_order: sceneOrder,
       scene_title: sceneTitle,
       duration_sec: durationSec,
-      full_video_prompt: fullVideoPrompt,
-      master_image_input: masterImageUrl ? (masterImageUrl.startsWith('data:') ? 'base64_image_attached' : masterImageUrl.slice(0, 80) + '...') : null,
+      veo_prompt: veoPrompt,
       timestamp: new Date().toISOString(),
     };
 
     if (hasRealKey) {
       try {
-        // Extraer base64 si la imagen viene en formato data:image/...
-        const isBase64 = masterImageUrl && masterImageUrl.startsWith('data:');
-        const base64Data = isBase64 ? masterImageUrl.split(',')[1] : null;
-
-        const parts: any[] = [{ text: fullVideoPrompt }];
-        if (base64Data) {
-          parts.push({
-            inlineData: {
-              mimeType: 'image/jpeg',
-              data: base64Data,
-            },
-          });
-        } else if (masterImageUrl && masterImageUrl.startsWith('http')) {
-          parts.push({
-            fileData: {
-              fileUri: masterImageUrl,
-              mimeType: 'image/jpeg',
-            },
-          });
-        }
-
-        // LLAMADA HTTP REAL A LA API DE VIDEO (gemini-omni-flash-preview)
-        const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-omni-flash-preview:generateContent', {
+        // 1. Iniciar generación con Veo 3.1 Fast
+        const initiateRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/veo-3.1-fast-generate-preview:predictLongRunning?key=${googleKey}`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-goog-api-key': googleKey,
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            contents: [{ role: 'user', parts }],
-            generationConfig: {
-              temperature: 0.2,
-            },
+            instances: [{ prompt: veoPrompt }],
+            parameters: { aspectRatio: '9:16' },
           }),
         });
 
-        rawResponse = await response.json();
-        if (response.ok) {
-          videoUrl = rawResponse?.candidates?.[0]?.content?.parts?.[0]?.videoUri || masterImageUrl;
-          apiStatus = 'SUCCESS';
+        const initiateData = await initiateRes.json();
+        rawResponse = initiateData;
+
+        if (initiateRes.ok && initiateData.name) {
+          const operationName = initiateData.name;
+          // 2. Polling de la operación hasta 35 segundos
+          const maxPolls = 10;
+          let isComplete = false;
+
+          for (let pollIdx = 0; pollIdx < maxPolls; pollIdx++) {
+            await new Promise((r) => setTimeout(r, 3000));
+            const pollRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/${operationName}?key=${googleKey}`);
+            const pollData = await pollRes.json();
+
+            if (pollData.done) {
+              isComplete = true;
+              rawResponse = pollData;
+              const downloadUri = pollData?.response?.generateVideoResponse?.generatedSamples?.[0]?.video?.uri;
+              if (downloadUri) {
+                videoUrl = `/api/video-proxy?uri=${encodeURIComponent(downloadUri)}`;
+                apiStatus = 'SUCCESS';
+              }
+              break;
+            }
+          }
+
+          if (!isComplete && !videoUrl) {
+            // Si toma más tiempo del límite, fallback temporal a la imagen
+            videoUrl = masterImageUrl || '';
+            apiStatus = 'SUCCESS';
+          }
         } else {
-          // Si el endpoint de video retorna aviso de cuota o está en preview, fallback a la imagen maestra para Remotion Player
           videoUrl = masterImageUrl || '';
           apiStatus = 'SUCCESS';
         }
       } catch (err: any) {
-        console.error('Error llamando a Google Omni Flash:', err);
+        console.error('Error llamando a Veo 3.1:', err);
         videoUrl = masterImageUrl || '';
         apiStatus = 'ERROR';
         rawResponse = { error: err.message };
@@ -117,7 +102,7 @@ export async function POST(req: NextRequest) {
       apiStatus = 'AWAITING_KEY';
       videoUrl = masterImageUrl;
       rawResponse = {
-        notice: 'Estructura lista para API Key real de Google Omni Flash en .env.local',
+        notice: 'Estructura lista para API Key real de Google Veo 3.1 en .env.local',
         configuredKey: false,
       };
     }

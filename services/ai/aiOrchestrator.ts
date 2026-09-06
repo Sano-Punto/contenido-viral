@@ -20,13 +20,8 @@ export async function generateMasterImage(
   const isSingleMaster = framework.id === 'super-alimentos' || framework.id === 'alimentos-que-retan';
   const modelName = 'gemini-3-pro-image'; // Official Google AI: gemini-3-pro-image (Nano Banana Pro)
   
-  // Estructura del Prompt Pixar 3D adaptada al framework según las reglas maestras
-  let characterSubject = ideaPrompt;
-  if (framework.id === 'super-alimentos') {
-    characterSubject = `A cute and friendly Pixar-style organ character with big expressive eyes, smiling and full of vitality as it absorbs rich nutrients. Situated realistically inside a soft biological cavity environment with warm glowing pastel bokeh lighting. No text, no letters, no words. --ar 9:16`;
-  } else if (framework.id === 'alimentos-que-retan') {
-    characterSubject = `A cute Pixar-style organ character looking tired, sweating slightly and exhausted from processing harmful foods, inside a soft biological cavity with warm volumetric lighting. No text, no letters. --ar 9:16`;
-  }
+  // Usar el visualPrompt enriquecido y dinámico generado para el órgano específico
+  const characterSubject = ideaPrompt;
 
   const promptPayload = {
     model: modelName,
@@ -116,7 +111,7 @@ export async function renderSceneVideo(
     model: modelName,
     scene_id: scene.id,
     scene_order: scene.order,
-    video_control_prompt: scene.conceptOrReaction || scene.visualPrompt,
+    video_control_prompt: scene.videoControlPrompt || scene.conceptOrReaction || scene.visualPrompt,
     duration_sec: scene.durationSec,
   };
 

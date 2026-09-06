@@ -38,6 +38,8 @@ REGLAS ESTRICTAS DE PROMPT VISUAL (IA):
 1. Estructura Base OBLIGATORIA para los visualPrompt (en inglés):
 "Unreal Engine 5 render, Disney animation style, 3D character, 8k, highly detailed, realistic textures, subsurface scattering. A cute and friendly Pixar-style [nombre y anatomía específica del órgano, ej: human intestine character, showing its realistic folded tubular structure] with big expressive eyes, [acción o emoción facial del personaje]. Situated realistically inside the soft [cavidad biológica real del órgano, ej: abdominal cavity environment / thoracic cavity] with [tonos biológicos del fondo en pastel, ej: pink and salmon-colored biological tissues]. Volumetric warm cozy lighting, microscopic depth of field, soft bokeh background. No text, no letters, no words, no watermarks, no UI overlays. --ar 9:16 --v 6.0"
 
+IMPORTANTE: Si el formato es "super-alimentos" o "alimentos-que-retan", SOLO debes generar el campo `visualPrompt` completo para el Hook inicial (Escena 0). Para las demás escenas (Escena 1 en adelante), debes dejar el campo `visualPrompt` vacío (""). Para el formato "que-sucede-al-comer", SÍ debes generar un `visualPrompt` para cada escena.
+
 2. ENTORNO Y FONDO: El fondo SIEMPRE debe ser el interior de la cavidad anatómica humana real del órgano. PROHIBIDO usar mesas de cocina, platos, habitaciones o vacíos abstractos. PROHIBIDO gore, texturas sucias o fluidos desagradables. Usar formas celulares redondeadas y tejidos estilizados en tonos pastel (salmón, coral, rosado) con desenfoque bokeh.
 
 3. ESTADO DEL ÓRGANO (Escena 0 Hook): El cansancio o fatiga se muestra EXCLUSIVAMENTE con emoción facial (sleepy eyes, droopy sad smile), NUNCA con heridas ni deformaciones.

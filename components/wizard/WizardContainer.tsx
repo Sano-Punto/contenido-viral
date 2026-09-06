@@ -76,22 +76,43 @@ export const WizardContainer: React.FC = () => {
         })}
       </div>
 
-      {/* Sleek Floating Progress Card */}
+      {/* Centered Loading Modal */}
       {isLoading && (
-        <div className="fixed bottom-6 right-6 z-50 animate-in fade-in slide-in-from-bottom-5 duration-300 max-w-sm w-full mx-4 sm:mx-0">
-          <div className="bg-[#12131c]/95 text-white p-4 rounded-2xl shadow-2xl border border-white/10 flex items-center gap-4 backdrop-blur-md">
-            <div className="relative w-10 h-10 shrink-0 flex items-center justify-center">
-              <div className="absolute inset-0 rounded-full border-2 border-slate-700 border-t-sky-400 animate-spin" />
-              <Sparkles className="w-4 h-4 text-sky-400 animate-pulse" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-[#12131c] text-white p-6 sm:p-8 rounded-3xl shadow-2xl border border-white/10 max-w-md w-full mx-auto text-center space-y-5 animate-in zoom-in-95 duration-200">
+            <div className="relative w-16 h-16 mx-auto flex items-center justify-center">
+              <div className="absolute inset-0 rounded-full border-4 border-slate-700 border-t-sky-400 animate-spin" />
+              <Sparkles className="w-6 h-6 text-sky-400 animate-pulse" />
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-bold text-slate-100 flex items-center gap-1.5">
+
+            <div className="space-y-1.5">
+              <h3 className="text-lg font-bold text-white tracking-tight flex items-center justify-center gap-1.5">
                 <span>Generando con</span>
                 <span className="font-serif italic font-semibold text-silver-shine">IA</span>
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed max-w-xs mx-auto">
+                {generatingStep || 'Diseñando conceptos visuales y generando imagen maestra...'}
               </p>
-              <p className="text-[11px] text-slate-400 truncate mt-0.5">
-                {generatingStep || 'Procesando conceptos...'}
-              </p>
+            </div>
+
+            {/* Micro steps indicator */}
+            <div className="bg-white/5 border border-white/10 rounded-xl p-3 text-left space-y-2">
+              <div className="flex items-center gap-2 text-[11px] text-slate-300">
+                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                <span>Estructurando conceptos biológicos y retención</span>
+              </div>
+              <div className="flex items-center gap-2 text-[11px] text-slate-300">
+                <div className="w-2 h-2 rounded-full bg-sky-400 animate-pulse shrink-0" />
+                <span>Generando render 3D con gemini-3-pro-image</span>
+              </div>
+              <div className="flex items-center gap-2 text-[11px] text-slate-400">
+                <div className="w-2 h-2 rounded-full bg-slate-500 shrink-0" />
+                <span>Sincronizando escenas para el storyboard</span>
+              </div>
+            </div>
+
+            <div className="text-[10px] text-slate-400 font-medium">
+              Por favor espera unos segundos mientras la IA completa los renders...
             </div>
           </div>
         </div>

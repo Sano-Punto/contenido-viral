@@ -24,10 +24,9 @@ interface MenuItem {
 const MENU_ITEMS: MenuItem[] = [
   { id: 'generator', label: 'Generador de videos', icon: Wand2, badge: 'IA' },
   { id: 'editor', label: 'Estudio Remotion', icon: Film },
-  { id: 'frameworks', label: 'Formatos & frameworks', icon: Layers, badge: '6' },
+  { id: 'frameworks', label: 'Formatos & frameworks', icon: Layers, badge: '3' },
   { id: 'media-library', label: 'Biblioteca de medios', icon: FolderOpen },
   { id: 'render-queue', label: 'Cola de renders', icon: ListOrdered },
-  { id: 'logs', label: 'Logs & Trazabilidad', icon: Activity, badge: 'En vivo' },
   { id: 'ai-settings', label: 'Configuración & APIs', icon: Settings },
 ];
 
