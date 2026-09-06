@@ -7,7 +7,7 @@ import { Step2IdeaInput } from './Step2IdeaInput';
 import { Step3ScriptReview } from './Step3ScriptReview';
 import { Step4Storyboard } from './Step4Storyboard';
 import { Step5VideoReady } from './Step5VideoReady';
-import { Check } from 'lucide-react';
+import { Check, Sparkles } from 'lucide-react';
 
 export const WizardContainer: React.FC = () => {
   const { currentStep, setStep, isLoading, generatingStep, project, frameworks } = useSystemStore();
@@ -76,18 +76,23 @@ export const WizardContainer: React.FC = () => {
         })}
       </div>
 
-      {/* Loading overlay */}
+      {/* Sleek Floating Progress Card */}
       {isLoading && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center">
-          <div className="bg-white p-6 rounded-2xl shadow-xl max-w-xs w-full text-center border border-[#e2dcce]">
-            <div className="w-10 h-10 rounded-full border-[3px] border-slate-200 border-t-slate-900 animate-spin mx-auto mb-3" />
-            <p className="text-sm font-bold text-gray-900">
-              Generando con{' '}
-              <span className="font-serif italic font-semibold text-silver-shine">IA</span>
-            </p>
-            <p className="text-[11px] text-gray-500 mt-1">
-              {generatingStep || 'Procesando conceptos...'}
-            </p>
+        <div className="fixed bottom-6 right-6 z-50 animate-in fade-in slide-in-from-bottom-5 duration-300 max-w-sm w-full mx-4 sm:mx-0">
+          <div className="bg-[#12131c]/95 text-white p-4 rounded-2xl shadow-2xl border border-white/10 flex items-center gap-4 backdrop-blur-md">
+            <div className="relative w-10 h-10 shrink-0 flex items-center justify-center">
+              <div className="absolute inset-0 rounded-full border-2 border-slate-700 border-t-sky-400 animate-spin" />
+              <Sparkles className="w-4 h-4 text-sky-400 animate-pulse" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-bold text-slate-100 flex items-center gap-1.5">
+                <span>Generando con</span>
+                <span className="font-serif italic font-semibold text-silver-shine">IA</span>
+              </p>
+              <p className="text-[11px] text-slate-400 truncate mt-0.5">
+                {generatingStep || 'Procesando conceptos...'}
+              </p>
+            </div>
           </div>
         </div>
       )}

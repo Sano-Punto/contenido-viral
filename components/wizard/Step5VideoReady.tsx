@@ -14,6 +14,8 @@ import {
   RefreshCw,
   Sliders,
   Play,
+  Copy,
+  Check,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -26,6 +28,7 @@ export const Step5VideoReady: React.FC = () => {
   const [processingProgress, setProcessingProgress] = useState(10);
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadSuccess, setDownloadSuccess] = useState(false);
+  const [copiedCaption, setCopiedCaption] = useState(false);
 
   const fps = 30;
   const scenes = project.scenes || [];
@@ -314,6 +317,41 @@ export const Step5VideoReady: React.FC = () => {
                   <span>Abrir en Estudio Remotion para editar</span>
                 </button>
               </div>
+
+              {/* Opción 3: Caption Profesional para Redes Sociales */}
+              {project.caption && (
+                <div className="p-4 rounded-xl bg-[#faf7f2] border border-[#ded7c8] space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <div className="text-xs font-bold text-gray-900 flex items-center gap-1.5">
+                      <span>📝 Caption Listo para Publicar (TikTok / Reels)</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigator.clipboard.writeText(project.caption || '');
+                        setCopiedCaption(true);
+                        setTimeout(() => setCopiedCaption(false), 2000);
+                      }}
+                      className="px-2.5 py-1 rounded-lg bg-white border border-slate-300 hover:bg-slate-50 text-[11px] font-bold text-slate-700 flex items-center gap-1 transition-all shadow-sm"
+                    >
+                      {copiedCaption ? (
+                        <>
+                          <Check className="w-3 h-3 text-emerald-600" />
+                          <span className="text-emerald-700">¡Copiado!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3 h-3 text-slate-600" />
+                          <span>Copiar</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  <div className="max-h-40 overflow-y-auto p-3 bg-white rounded-lg border border-slate-200 text-xs text-gray-700 whitespace-pre-line font-sans leading-relaxed select-all">
+                    {project.caption}
+                  </div>
+                </div>
+              )}
 
               {/* Acción secundaria: Nuevo video */}
               <div className="pt-2 border-t border-[#f0ebe0] flex items-center justify-between">

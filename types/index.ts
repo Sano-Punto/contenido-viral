@@ -55,6 +55,9 @@ export interface Scene {
   isGenerating?: boolean;
   subjectOrItem?: string;      // Ej: "Arándanos silvestres"
   conceptOrReaction?: string;  // Ej: "Cerebro absorbiendo antioxidantes y encendiendo sinapsis 3D"
+  cameraMovement?: string;
+  asmrFx?: string;
+  videoControlPrompt?: string;
 }
 
 export interface BgmTrack {
@@ -74,6 +77,7 @@ export interface Project {
   tone: string;
   scenesCount: number;
   scenes: Scene[];
+  caption?: string;
   subtitleStyleId: SubtitleStyleId;
   bgmTrackId?: string;
   bgmVolume: number; // 0.0 to 1.0

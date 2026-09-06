@@ -58,7 +58,7 @@ export const SUPER_ALIMENTOS_CATALOG = [
     actionConsume: 'Consume 2 nueces al día.',
     reaction: 'Aportan selenio puro que activa las hormonas T3 y T4, devolviendo energía inmediata a la tiroides.',
     asmr: '¡Crunch-crunch! 🌰 | ¡Shiing! ✨',
-    visualPrompt: 'Unreal Engine 5 render, Disney animation style, 3D character, 8k. Hand enters holding Brazil nuts towards a cute Pixar-style butterfly thyroid gland character. The thyroid takes a bite and glows with radiant purple and golden bio-energy. Soft pink cavity bokeh. No text, no letters. --ar 9:16',
+    visualPrompt: 'Unreal Engine 5 render, Disney animation style, 3D character, 8k, highly detailed, realistic textures, subsurface scattering. A cute and friendly Pixar-style thyroid gland character with butterfly shape and big expressive eyes, smiling happily as a human hand feeds it Brazil nuts, glowing with golden energy. Situated realistically inside the soft throat cavity environment with pink and salmon-colored biological tissues. Volumetric warm cozy lighting, microscopic depth of field, soft bokeh background. No text, no letters, no words, no watermarks, no UI overlays. --ar 9:16 --v 6.0',
   },
   {
     organ: 'Cerebro',
@@ -66,7 +66,7 @@ export const SUPER_ALIMENTOS_CATALOG = [
     actionConsume: '1 taza al día en el desayuno.',
     reaction: 'Las antocianinas cruzan la barrera hematoencefálica, encendiendo sinapsis neuronales luminosas.',
     asmr: '¡Pop-juicy! 🫐 | ¡Zzzzt-sparkle! ⚡',
-    visualPrompt: 'Unreal Engine 5 render, Disney animation style, 3D character, 8k. A cute chubby Pixar-style human brain character eating fresh blueberries, with neurons lighting up like vibrant blue fireworks. Warm lighting. No text. --ar 9:16',
+    visualPrompt: 'Unreal Engine 5 render, Disney animation style, 3D character, 8k, highly detailed, realistic textures, subsurface scattering. A cute and friendly Pixar-style human brain character with big expressive eyes and soft convolutions, tasting fresh wild blueberries as synapses light up with radiant blue energy. Situated realistically inside the soft cranial cavity environment with pastel violet and pink biological tissues. Volumetric warm cozy lighting, microscopic depth of field, soft bokeh background. No text, no letters, no words, no watermarks, no UI overlays. --ar 9:16 --v 6.0',
   },
   {
     organ: 'Hígado',
@@ -74,7 +74,7 @@ export const SUPER_ALIMENTOS_CATALOG = [
     actionConsume: 'Consumir al vapor o en infusión.',
     reaction: 'Estimula la producción de bilis y regenera hepatocitos, limpiando toxinas acumuladas.',
     asmr: '¡Gulp-fresh! 🌿 | ¡Glow-pure! ✨',
-    visualPrompt: 'Unreal Engine 5 render, Disney animation style, 3D character, 8k. A cute Pixar-style liver character smiling happily as golden herbal drops wash away dullness, transforming it into a bright rosy clean organ. No text. --ar 9:16',
+    visualPrompt: 'Unreal Engine 5 render, Disney animation style, 3D character, 8k, highly detailed, realistic textures, subsurface scattering. A cute and friendly Pixar-style liver character with big expressive eyes and soft rounded lobes, happily receiving herbal tea drops and glowing with a pure emerald health aura. Situated realistically inside the soft abdominal cavity environment with warm coral and pink biological tissues. Volumetric warm cozy lighting, microscopic depth of field, soft bokeh background. No text, no letters, no words, no watermarks, no UI overlays. --ar 9:16 --v 6.0',
   },
   {
     organ: 'Corazón & Arterias',
@@ -82,7 +82,7 @@ export const SUPER_ALIMENTOS_CATALOG = [
     actionConsume: 'Medio vaso de jugo natural sin azúcar.',
     reaction: 'Aumenta el óxido nítrico, dilatando las arterias y optimizando la presión sanguínea con bombeo vigoroso.',
     asmr: '¡Splash-ruby! 🍷 | ¡Thump-rhythmic! 🫀',
-    visualPrompt: 'Unreal Engine 5 render, Disney animation style, 3D character, 8k. A friendly Pixar-style heart character taking a sip of fresh ruby pomegranate juice, arteries glowing with vibrant crimson light. No text. --ar 9:16',
+    visualPrompt: 'Unreal Engine 5 render, Disney animation style, 3D character, 8k, highly detailed, realistic textures, subsurface scattering. A cute and friendly Pixar-style heart character with big expressive eyes, happily drinking fresh ruby pomegranate juice as its coronary vessels glow with healthy crimson light. Situated realistically inside the soft thoracic cavity environment with pink and rosy biological tissues. Volumetric warm cozy lighting, microscopic depth of field, soft bokeh background. No text, no letters, no words, no watermarks, no UI overlays. --ar 9:16 --v 6.0',
   },
   {
     organ: 'Intestino & Microbiota',
@@ -90,7 +90,7 @@ export const SUPER_ALIMENTOS_CATALOG = [
     actionConsume: '1 porción en ayunas o merienda.',
     reaction: 'Billones de bacterias amigables repueblan las paredes intestinales reduciendo la inflamación.',
     asmr: '¡Smooth-gulp! 🥛 | ¡Pop-shield! 🛡️',
-    visualPrompt: 'Unreal Engine 5 render, Disney animation style, 3D character, 8k. A cute folded tubular intestine character surrounded by tiny smiling friendly probiotic microbes hugging it happily. Pastel salmon environment. No text. --ar 9:16',
+    visualPrompt: 'Unreal Engine 5 render, Disney animation style, 3D character, 8k, highly detailed, realistic textures, subsurface scattering. A cute and friendly Pixar-style human intestine character with folded tubular structure and big expressive eyes, smiling and hugged by tiny glowing probiotic friends. Situated realistically inside the soft abdominal cavity environment with pink and salmon-colored biological tissues. Volumetric warm cozy lighting, microscopic depth of field, soft bokeh background. No text, no letters, no words, no watermarks, no UI overlays. --ar 9:16 --v 6.0',
   },
   {
     organ: 'Riñones',
@@ -98,7 +98,7 @@ export const SUPER_ALIMENTOS_CATALOG = [
     actionConsume: '1 rodaja fresca hidratante.',
     reaction: 'Filtración profunda de ácido úrico y máxima hidratación celular con efecto diurético suave.',
     asmr: '¡Crisp-crunch! 🍉 | ¡Flush-water! 💧',
-    visualPrompt: 'Unreal Engine 5 render, Disney animation style, 3D character, 8k. Twin Pixar-style kidney characters drinking watermelon lemon water, sparkling like clean crystals. Soft bokeh. No text. --ar 9:16',
+    visualPrompt: 'Unreal Engine 5 render, Disney animation style, 3D character, 8k, highly detailed, realistic textures, subsurface scattering. Cute and friendly twin Pixar-style kidney characters with big expressive eyes, drinking pure crystal-clear watermelon water and glowing cleanly. Situated realistically inside the soft posterior abdominal cavity environment with pastel pink biological tissues. Volumetric warm cozy lighting, microscopic depth of field, soft bokeh background. No text, no letters, no words, no watermarks, no UI overlays. --ar 9:16 --v 6.0',
   },
 ];
 

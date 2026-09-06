@@ -66,13 +66,16 @@ export const Step2IdeaInput: React.FC = () => {
     );
 
     try {
-      const generatedScenes = await generateViralScript({
+      const result = await generateViralScript({
         framework: selectedFw,
         ideaPrompt: idea,
         scenesCount,
       });
 
-      setScenes(generatedScenes);
+      setScenes(result.scenes);
+      if (result.caption) {
+        useSystemStore.getState().setCaption(result.caption);
+      }
       setLoading(false);
 
       // Si el formato no requiere guion hablado, pasamos directo al Storyboard (Paso 4)

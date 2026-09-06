@@ -33,6 +33,7 @@ interface SystemState {
   updateScene: (sceneId: string, updates: Partial<Scene>) => void;
   updateSceneDuration: (sceneId: string, duration: SceneDuration) => void;
   setSubtitleStyle: (styleId: SubtitleStyleId) => void;
+  setCaption: (caption: string) => void;
   setBgmTrack: (trackId?: string) => void;
   setBgmVolume: (volume: number) => void;
   setVoiceoverVolume: (volume: number) => void;
@@ -145,6 +146,16 @@ export const useSystemStore = create<SystemState>((set, get) => ({
       project: {
         ...state.project,
         subtitleStyleId: styleId,
+        updatedAt: new Date().toISOString(),
+      },
+    }));
+  },
+
+  setCaption: (caption) => {
+    set((state) => ({
+      project: {
+        ...state.project,
+        caption,
         updatedAt: new Date().toISOString(),
       },
     }));
