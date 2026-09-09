@@ -19,9 +19,9 @@ export const TimelineEditor: React.FC<TimelineEditorProps> = ({
   const currentTimeSec = currentFrame / fps;
 
   return (
-    <div className="bg-white border border-[#e0dad0] rounded-2xl p-4 space-y-3 shadow-sm">
+    <div className="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-sm">
       {/* Header de la Timeline */}
-      <div className="flex items-center justify-between text-xs text-gray-600 pb-2 border-b border-[#f0ebe0]">
+      <div className="flex items-center justify-between text-xs text-gray-600 pb-2 border-b border-slate-200">
         <div className="flex items-center gap-2">
           <span className="font-bold text-gray-900">Timeline Multipista</span>
           <span className="bg-purple-50 text-purple-700 px-2 py-0.5 rounded text-[10px] font-bold border border-purple-200">
@@ -34,7 +34,7 @@ export const TimelineEditor: React.FC<TimelineEditorProps> = ({
       </div>
 
       {/* Regla de Tiempo Superior */}
-      <div className="relative h-6 bg-[#f7f4ed] rounded-lg overflow-hidden border border-[#e2ded5] flex items-center px-2">
+      <div className="relative h-6 bg-slate-50 rounded-lg overflow-hidden border border-slate-200 flex items-center px-2">
         {Array.from({ length: Math.ceil(totalDurationSec / 5) + 1 }).map((_, i) => {
           const sec = i * 5;
           const leftPercent = (sec / totalDurationSec) * 100;
@@ -66,7 +66,7 @@ export const TimelineEditor: React.FC<TimelineEditorProps> = ({
           <Film className="w-3.5 h-3.5 text-purple-600" />
           <span>Escenas</span>
         </div>
-        <div className="flex-1 flex gap-1 h-12 bg-[#f7f4ed] rounded-xl p-1 overflow-hidden border border-[#e2ded5]">
+        <div className="flex-1 flex gap-1 h-12 bg-slate-50 rounded-xl p-1 overflow-hidden border border-slate-200">
           {scenes.map((scene, idx) => {
             const widthPercent = (scene.durationSec / totalDurationSec) * 100;
 
@@ -96,7 +96,7 @@ export const TimelineEditor: React.FC<TimelineEditorProps> = ({
           <Type className="w-3.5 h-3.5 text-amber-600" />
           <span>Subtítulos</span>
         </div>
-        <div className="flex-1 flex gap-1 h-7 bg-[#f7f4ed] rounded-xl p-1 overflow-hidden border border-[#e2ded5]">
+        <div className="flex-1 flex gap-1 h-7 bg-slate-50 rounded-xl p-1 overflow-hidden border border-slate-200">
           {scenes.map((scene) => {
             const widthPercent = (scene.durationSec / totalDurationSec) * 100;
 
@@ -119,7 +119,7 @@ export const TimelineEditor: React.FC<TimelineEditorProps> = ({
           <Mic className="w-3.5 h-3.5 text-emerald-600" />
           <span>Voz IA</span>
         </div>
-        <div className="flex-1 flex gap-1 h-7 bg-[#f7f4ed] rounded-xl p-1 overflow-hidden border border-[#e2ded5]">
+        <div className="flex-1 flex gap-1 h-7 bg-slate-50 rounded-xl p-1 overflow-hidden border border-slate-200">
           {scenes.map((scene) => {
             const widthPercent = (scene.durationSec / totalDurationSec) * 100;
 
@@ -142,7 +142,7 @@ export const TimelineEditor: React.FC<TimelineEditorProps> = ({
           <Music className="w-3.5 h-3.5 text-indigo-600" />
           <span>Música BGM</span>
         </div>
-        <div className="flex-1 h-7 bg-[#f7f4ed] rounded-xl p-1 overflow-hidden border border-[#e2ded5]">
+        <div className="flex-1 h-7 bg-slate-50 rounded-xl p-1 overflow-hidden border border-slate-200">
           <div className="w-full h-full rounded-lg bg-indigo-100 border border-indigo-300 px-3 flex items-center text-[10px] text-indigo-950 font-bold">
             🎵 {project.bgmTrackId || 'Phonk Viral Beat'} (Vol: {Math.round((project.bgmVolume ?? 0.25) * 100)}%)
           </div>

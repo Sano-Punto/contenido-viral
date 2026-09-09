@@ -9,7 +9,6 @@ export const MediaLibraryView: React.FC = () => {
   const { project } = useSystemStore();
   const [filter, setFilter] = useState<'all' | 'images' | 'audio'>('all');
 
-  // Obtener medios reales generados en el proyecto actual
   const realGeneratedImages = project.scenes
     .filter((s) => s.mediaUrl)
     .map((s, idx) => ({
@@ -22,24 +21,24 @@ export const MediaLibraryView: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header y Filtros */}
-      <div className="bg-white border border-[#ded7c8] rounded-2xl p-5 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h3 className="font-bold text-gray-900 text-sm flex items-center gap-2">
-            <FolderOpen className="w-4 h-4 text-gray-700" />
+          <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+            <FolderOpen className="w-4 h-4 text-slate-700" />
             <span>Biblioteca de medios del proyecto</span>
           </h3>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-slate-500">
             Recursos visuales 9:16 generados con Nano Banana Pro y pistas de audio licenciadas.
           </p>
         </div>
 
         {/* Botones de Filtro */}
-        <div className="flex items-center gap-1 bg-[#f7f4ed] p-1 rounded-xl border border-[#ded7c8]">
+        <div className="flex items-center gap-1 bg-slate-100/80 p-1 rounded-xl border border-slate-200">
           <button
             type="button"
             onClick={() => setFilter('all')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              filter === 'all' ? 'btn-silver-luxury text-white shadow-sm' : 'text-gray-600 hover:text-gray-900'
+              filter === 'all' ? 'btn-silver-luxury text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             Todos ({realGeneratedImages.length + BGM_TRACKS.length})
@@ -48,7 +47,7 @@ export const MediaLibraryView: React.FC = () => {
             type="button"
             onClick={() => setFilter('images')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              filter === 'images' ? 'btn-silver-luxury text-white shadow-sm' : 'text-gray-600 hover:text-gray-900'
+              filter === 'images' ? 'btn-silver-luxury text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             Visuales 9:16 ({realGeneratedImages.length})
@@ -57,7 +56,7 @@ export const MediaLibraryView: React.FC = () => {
             type="button"
             onClick={() => setFilter('audio')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              filter === 'audio' ? 'btn-silver-luxury text-white shadow-sm' : 'text-gray-600 hover:text-gray-900'
+              filter === 'audio' ? 'btn-silver-luxury text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             Pistas BGM ({BGM_TRACKS.length})
@@ -68,16 +67,16 @@ export const MediaLibraryView: React.FC = () => {
       {/* Grid de Imágenes 9:16 Reales */}
       {(filter === 'all' || filter === 'images') && (
         <div className="space-y-3">
-          <h4 className="text-xs font-bold text-gray-700 flex items-center gap-1.5">
+          <h4 className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
             <ImageIcon className="w-3.5 h-3.5 text-slate-700" />
             <span>Visuales generados con IA (9:16)</span>
           </h4>
 
           {realGeneratedImages.length === 0 ? (
-            <div className="bg-white border border-[#ded7c8] rounded-xl p-8 text-center text-gray-400 space-y-1.5">
-              <ImageIcon className="w-6 h-6 text-gray-300 mx-auto" />
-              <div className="text-xs font-semibold text-gray-600">No hay visuales generados en esta sesión</div>
-              <p className="text-[11px] text-gray-400">
+            <div className="bg-white border border-slate-200 rounded-xl p-8 text-center text-slate-400 space-y-1.5">
+              <ImageIcon className="w-6 h-6 text-slate-300 mx-auto" />
+              <div className="text-xs font-semibold text-slate-600">No hay visuales generados en esta sesión</div>
+              <p className="text-[11px] text-slate-400">
                 Cuando generes escenas con Nano Banana Pro en el Generador, aparecerán catalogadas aquí en tiempo real.
               </p>
             </div>
@@ -86,7 +85,7 @@ export const MediaLibraryView: React.FC = () => {
               {realGeneratedImages.map((img) => (
                 <div
                   key={img.id}
-                  className="bg-white border border-[#ded7c8] rounded-xl overflow-hidden group hover:border-gray-400 transition-all shadow-sm flex flex-col"
+                  className="bg-white border border-slate-200 rounded-xl overflow-hidden group hover:border-slate-400 transition-all shadow-sm flex flex-col"
                 >
                   <div className="relative aspect-[9/16] overflow-hidden bg-black">
                     <img
@@ -99,7 +98,7 @@ export const MediaLibraryView: React.FC = () => {
                     </span>
                   </div>
                   <div className="p-2">
-                    <div className="text-[11px] font-medium text-gray-900 truncate">{img.title}</div>
+                    <div className="text-[11px] font-medium text-slate-900 truncate">{img.title}</div>
                   </div>
                 </div>
               ))}
@@ -111,7 +110,7 @@ export const MediaLibraryView: React.FC = () => {
       {/* Grid de Pistas de Audio Licenciadas */}
       {(filter === 'all' || filter === 'audio') && (
         <div className="space-y-3 pt-2">
-          <h4 className="text-xs font-bold text-gray-700 flex items-center gap-1.5">
+          <h4 className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
             <Music className="w-3.5 h-3.5 text-slate-700" />
             <span>Pistas de música de fondo (BGM)</span>
           </h4>
@@ -119,15 +118,15 @@ export const MediaLibraryView: React.FC = () => {
             {BGM_TRACKS.map((track) => (
               <div
                 key={track.id}
-                className="p-3 bg-white border border-[#ded7c8] rounded-xl flex items-center justify-between hover:border-gray-400 shadow-sm transition-all"
+                className="p-3 bg-white border border-slate-200 rounded-xl flex items-center justify-between hover:border-slate-400 shadow-sm transition-all"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-[#f6f3eb] border border-[#ded7c8] flex items-center justify-center text-gray-700">
+                  <div className="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-700">
                     <Music className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="text-xs font-bold text-gray-900">{track.title}</div>
-                    <div className="text-[11px] text-gray-500">{track.genre} • {track.durationSec}s</div>
+                    <div className="text-xs font-bold text-slate-900">{track.title}</div>
+                    <div className="text-[11px] text-slate-500">{track.genre} • {track.durationSec}s</div>
                   </div>
                 </div>
 
@@ -135,7 +134,7 @@ export const MediaLibraryView: React.FC = () => {
                   href={track.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-lg bg-[#f7f4ed] hover:bg-neutral-800 hover:text-white text-gray-700 border border-[#ded7c8] transition-all"
+                  className="p-2 rounded-lg bg-slate-50 hover:bg-slate-900 hover:text-white text-slate-700 border border-slate-200 transition-all"
                 >
                   <Play className="w-3.5 h-3.5" />
                 </a>

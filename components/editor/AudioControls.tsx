@@ -14,7 +14,7 @@ export const AudioControls: React.FC = () => {
       </div>
 
       {/* Sliders de Volumen */}
-      <div className="space-y-3.5 bg-[#faf7f2] p-3.5 rounded-xl border border-[#ded7c8]">
+      <div className="space-y-3.5 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
         {/* Volumen de Voz en Off */}
         <div className="space-y-1.5">
           <div className="flex items-center justify-between text-xs font-semibold text-gray-800">
@@ -31,7 +31,7 @@ export const AudioControls: React.FC = () => {
             step="0.05"
             value={project.voiceoverVolume ?? 1.0}
             onChange={(e) => setVoiceoverVolume(parseFloat(e.target.value))}
-            className="w-full h-1.5 bg-[#e5e0d4] rounded-lg appearance-none cursor-pointer accent-slate-800"
+            className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-slate-800"
           />
         </div>
 
@@ -51,7 +51,7 @@ export const AudioControls: React.FC = () => {
             step="0.05"
             value={project.bgmVolume ?? 0.25}
             onChange={(e) => setBgmVolume(parseFloat(e.target.value))}
-            className="w-full h-1.5 bg-[#e5e0d4] rounded-lg appearance-none cursor-pointer accent-slate-800"
+            className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-slate-800"
           />
         </div>
       </div>
@@ -72,7 +72,7 @@ export const AudioControls: React.FC = () => {
                 className={`cursor-pointer rounded-xl p-3 border flex items-center justify-between transition-all ${
                   isSelected
                     ? 'silver-selected'
-                    : 'bg-[#faf7f2] border-[#ded7c8] hover:border-slate-400'
+                    : 'bg-slate-50 border-slate-200 hover:border-slate-400'
                 }`}
               >
                 <div>

@@ -14,11 +14,11 @@ const config: Config = {
       },
       colors: {
         arena: {
-          50: "#faf8f4",
-          100: "#f6f3eb",
-          200: "#ece7dc",
-          300: "#ded7c8",
-          border: "#e2dcce",
+          50: "#f8fafc",
+          100: "#f1f5f9",
+          200: "#e2e8f0",
+          300: "#cbd5e1",
+          border: "#cbd5e1",
         },
         silver: {
           50: "#f8f9fa",

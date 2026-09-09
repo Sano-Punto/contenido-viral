@@ -36,7 +36,7 @@ export const Step1FrameworkSelector: React.FC = () => {
               className={`text-left rounded-xl p-4 border transition-all ${
                 isSelected
                   ? 'silver-selected'
-                  : 'bg-white border-[#ded7c8] hover:border-slate-400'
+                  : 'bg-white border-slate-200 hover:border-slate-400'
               }`}
             >
               <div className="flex items-start justify-between gap-2 mb-2">

@@ -23,7 +23,7 @@ export const FrameworksView: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Lista de frameworks */}
         <div className="lg:col-span-5 space-y-2">
-          <h3 className="text-sm font-bold text-gray-800 mb-3">
+          <h3 className="text-sm font-bold text-slate-800 mb-3">
             Formatos disponibles ({frameworks.length})
           </h3>
 
@@ -38,14 +38,14 @@ export const FrameworksView: React.FC = () => {
                   className={`cursor-pointer rounded-xl p-3.5 border transition-all ${
                     isSelected
                       ? 'silver-selected'
-                      : 'bg-white border-[#ded7c8] hover:border-slate-400'
+                      : 'bg-white border-slate-200 hover:border-slate-400'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <h4 className="font-bold text-gray-900 text-sm">{fw.name}</h4>
+                    <h4 className="font-bold text-slate-900 text-sm">{fw.name}</h4>
                     <span className="text-[10px] font-semibold text-slate-500">{fw.category}</span>
                   </div>
-                  <p className="text-[11px] text-gray-500 line-clamp-1">
+                  <p className="text-[11px] text-slate-500 line-clamp-1">
                     {fw.niche}
                   </p>
                 </div>
@@ -55,11 +55,11 @@ export const FrameworksView: React.FC = () => {
         </div>
 
         {/* Detalle del framework seleccionado */}
-        <div className="lg:col-span-7 bg-white border border-[#ded7c8] rounded-xl p-5 space-y-4 shadow-sm">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-[#f0ebe0]">
+        <div className="lg:col-span-7 bg-white border border-slate-200 rounded-xl p-5 space-y-4 shadow-sm">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
             <div>
               <span className="text-[10px] font-semibold text-slate-500 block mb-0.5">{activeFramework.category}</span>
-              <h3 className="text-base font-bold text-gray-900">{activeFramework.name}</h3>
+              <h3 className="text-base font-bold text-slate-900">{activeFramework.name}</h3>
             </div>
 
             <button
@@ -74,20 +74,20 @@ export const FrameworksView: React.FC = () => {
 
           <div className="space-y-3">
             <div>
-              <span className="text-[10px] font-semibold text-gray-400 block mb-1">Descripción</span>
-              <p className="text-sm text-gray-700 leading-relaxed">
+              <span className="text-[10px] font-semibold text-slate-400 block mb-1">Descripción</span>
+              <p className="text-sm text-slate-700 leading-relaxed">
                 {activeFramework.description}
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="p-3 rounded-lg bg-[#faf7f2] border border-[#ded7c8]">
-                <span className="text-[10px] font-semibold text-gray-400 block mb-1">Nichos</span>
-                <p className="text-xs text-gray-800 font-bold">{activeFramework.niche}</p>
+              <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
+                <span className="text-[10px] font-semibold text-slate-400 block mb-1">Nichos</span>
+                <p className="text-xs text-slate-800 font-bold">{activeFramework.niche}</p>
               </div>
-              <div className="p-3 rounded-lg bg-[#faf7f2] border border-[#ded7c8]">
-                <span className="text-[10px] font-semibold text-gray-400 block mb-1">Audiencia</span>
-                <p className="text-xs text-gray-800 font-bold">{activeFramework.targetAudience}</p>
+              <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
+                <span className="text-[10px] font-semibold text-slate-400 block mb-1">Audiencia</span>
+                <p className="text-xs text-slate-800 font-bold">{activeFramework.targetAudience}</p>
               </div>
             </div>
           </div>

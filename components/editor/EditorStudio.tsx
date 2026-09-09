@@ -55,7 +55,7 @@ export const EditorStudio: React.FC = () => {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-8">
       {/* Header Superior del Editor */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white border border-[#ded7c8] p-4 sm:p-5 rounded-2xl shadow-sm">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white border border-slate-200 p-4 sm:p-5 rounded-2xl shadow-sm">
         <div className="flex items-center gap-3">
           <button
             type="button"
@@ -114,7 +114,7 @@ export const EditorStudio: React.FC = () => {
       {/* Grid Central */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Columna Izquierda: Remotion Player (5/12) */}
-        <div className="lg:col-span-5 flex flex-col items-center justify-center bg-white border border-[#ded7c8] p-4 sm:p-6 rounded-2xl shadow-sm">
+        <div className="lg:col-span-5 flex flex-col items-center justify-center bg-white border border-slate-200 p-4 sm:p-6 rounded-2xl shadow-sm">
           <div className="relative w-full max-w-[320px] aspect-[9/16] rounded-2xl overflow-hidden shadow-xl border-4 border-[#121221] bg-black">
             {scenes.length > 0 ? (
               <Player
@@ -145,9 +145,9 @@ export const EditorStudio: React.FC = () => {
         </div>
 
         {/* Columna Derecha: Panel de Herramientas de Edición (7/12) */}
-        <div className="lg:col-span-7 bg-white border border-[#ded7c8] rounded-2xl p-5 shadow-sm flex flex-col h-full min-h-[480px]">
+        <div className="lg:col-span-7 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col h-full min-h-[480px]">
           {/* Tabs */}
-          <div className="flex items-center gap-1.5 p-1 bg-[#f7f4ed] rounded-xl border border-[#ded7c8] mb-5">
+          <div className="flex items-center gap-1.5 p-1 bg-slate-50 rounded-xl border border-slate-200 mb-5">
             <button
               type="button"
               onClick={() => setActiveTab('subtitles')}
@@ -198,7 +198,7 @@ export const EditorStudio: React.FC = () => {
                 {scenes.map((s, idx) => (
                   <div
                     key={s.id}
-                    className="p-3 bg-[#f7f4ed] rounded-xl border border-[#ded7c8] flex items-center gap-3"
+                    className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center gap-3"
                   >
                     <img
                       src={s.mediaUrl}

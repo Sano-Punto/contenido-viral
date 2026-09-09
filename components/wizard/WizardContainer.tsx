@@ -67,7 +67,7 @@ export const WizardContainer: React.FC = () => {
               {idx < stepsConfig.length - 1 && (
                 <div
                   className={`flex-1 h-px transition-colors ${
-                    currentStep > s.internalStep ? 'bg-slate-400' : 'bg-[#e2dcce]'
+                    currentStep > s.internalStep ? 'bg-slate-400' : 'bg-slate-200'
                   }`}
                 />
               )}

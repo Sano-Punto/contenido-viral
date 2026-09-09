@@ -39,22 +39,6 @@ export const Step4Storyboard: React.FC = () => {
     }
   };
 
-  const handleCascadeRegenerate = async () => {
-    if (project.scenes.length === 0 || isCascading) return;
-    setIsCascading(true);
-    try {
-      const masterPrompt = project.scenes[0]?.visualPrompt || project.ideaPrompt || '3D Pixar character';
-      const newMediaUrl = await regenerateSceneVisual(masterPrompt, selectedFw.id);
-      project.scenes.forEach((scene) => {
-        updateScene(scene.id, { mediaUrl: newMediaUrl });
-      });
-    } catch (err) {
-      console.error('Error al regenerar en cascada:', err);
-    } finally {
-      setIsCascading(false);
-    }
-  };
-
   const handleProceedToVideoGeneration = () => {
     setStep(5);
   };
@@ -62,28 +46,26 @@ export const Step4Storyboard: React.FC = () => {
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white border border-[#ded7c8] p-5 rounded-2xl shadow-sm">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-[#14141e] flex items-center gap-2">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2">
             <span>Storyboard</span>
-            <span className="font-serif italic font-semibold text-silver-shine">visual</span>
+            <span className="font-serif italic font-bold text-silver-shine">visual</span>
             <span>& escenas ({project.scenes.length})</span>
           </h2>
-          <p className="text-xs text-gray-500 mt-0.5">
+          <p className="text-xs text-slate-500 mt-0.5">
             Revisa los visuales generados para cada escena. Puedes regenerar las imágenes tantas veces como quieras antes de procesar el video.
           </p>
         </div>
 
-        <div className="flex items-center gap-3 bg-[#f6f3eb] px-4 py-2 rounded-xl border border-[#ded7c8]">
+        <div className="flex items-center gap-3 bg-slate-50 px-4 py-2 rounded-xl border border-slate-200">
           <Clock className="w-4 h-4 text-slate-700" />
           <div className="text-right">
-            <div className="text-[10px] text-gray-400 font-medium">Duración total</div>
-            <div className="text-xs font-bold text-gray-900">{totalDuration}s ({project.scenes.length} clips de {selectedFw.defaultSceneDuration || 8}s)</div>
+            <div className="text-[10px] text-slate-400 font-medium">Duración total</div>
+            <div className="text-xs font-bold text-slate-900">{totalDuration}s ({project.scenes.length} clips de {selectedFw.defaultSceneDuration || 8}s)</div>
           </div>
         </div>
       </div>
-
-
 
       {/* Grid de Escenas del Storyboard */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -93,12 +75,12 @@ export const Step4Storyboard: React.FC = () => {
           return (
             <div
               key={scene.id}
-              className="bg-white border border-[#ded7c8] rounded-2xl overflow-hidden flex flex-col shadow-sm hover:border-slate-400 transition-all"
+              className="bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col shadow-sm hover:border-slate-400 transition-all"
             >
               {/* Contenedor Superior: Preview 9:16 y Detalles */}
               <div className="p-4 flex gap-4">
                 {/* Visual Thumbnail (Aspect Ratio 9:16) */}
-                <div className="relative w-28 h-48 sm:w-32 sm:h-56 shrink-0 rounded-xl overflow-hidden bg-black border border-[#ded7c8] group">
+                <div className="relative w-28 h-48 sm:w-32 sm:h-56 shrink-0 rounded-xl overflow-hidden bg-black border border-slate-200 group">
                   <img
                     src={scene.mediaUrl}
                     alt={scene.title}
@@ -135,22 +117,22 @@ export const Step4Storyboard: React.FC = () => {
                 <div className="flex-1 flex flex-col justify-between space-y-2.5">
                   <div>
                     <div className="flex items-center justify-between mb-1.5">
-                      <h3 className="font-bold text-gray-900 text-sm">
+                      <h3 className="font-bold text-slate-900 text-sm">
                         {scene.title}
                       </h3>
-                      <span className="text-[10px] font-bold text-slate-700 px-2 py-0.5 rounded bg-[#f1f5f9] border border-slate-300">
+                      <span className="text-[10px] font-bold text-slate-700 px-2 py-0.5 rounded bg-slate-100 border border-slate-300">
                         {scene.durationSec}s
                       </span>
                     </div>
 
                     {/* Desglose de Fruta & Reacción del Órgano si aplica */}
                     {scene.subjectOrItem && (
-                      <div className="space-y-1 bg-[#faf7f2] p-2 rounded-lg border border-[#e8e2d4] mb-2">
-                        <div className="text-[11px] text-gray-800">
+                      <div className="space-y-1 bg-slate-50 p-2 rounded-lg border border-slate-200 mb-2">
+                        <div className="text-[11px] text-slate-800">
                           <strong className="text-slate-900 font-bold">Elemento/Fruta:</strong> {scene.subjectOrItem}
                         </div>
                         {scene.conceptOrReaction && (
-                          <div className="text-[11px] text-gray-600 leading-snug">
+                          <div className="text-[11px] text-slate-600 leading-snug">
                             <strong className="text-slate-900 font-bold">Reacción:</strong> {scene.conceptOrReaction}
                           </div>
                         )}
@@ -158,14 +140,14 @@ export const Step4Storyboard: React.FC = () => {
                     )}
 
                     {!scene.subjectOrItem && (
-                      <p className="text-xs text-gray-700 line-clamp-3 italic leading-relaxed">
+                      <p className="text-xs text-slate-700 line-clamp-3 italic leading-relaxed">
                         "{scene.scriptText}"
                       </p>
                     )}
                   </div>
 
                   {/* Duración predeterminada o selector si es variable */}
-                  <div className="pt-2 border-t border-[#f0ebe0]">
+                  <div className="pt-2 border-t border-slate-100">
                     {isFixedDuration ? (
                       <div className="text-[11px] text-slate-600 font-medium flex items-center justify-between">
                         <span>Duración del clip:</span>
@@ -173,7 +155,7 @@ export const Step4Storyboard: React.FC = () => {
                       </div>
                     ) : (
                       <div className="space-y-1">
-                        <label className="text-[10px] font-semibold text-gray-400 block">
+                        <label className="text-[10px] font-semibold text-slate-400 block">
                           Duración del clip:
                         </label>
                         <div className="flex items-center gap-1.5">
@@ -200,8 +182,8 @@ export const Step4Storyboard: React.FC = () => {
 
               {/* Visual Prompt Input Inline para Regenerar */}
               <div className="px-4 pb-4 pt-1">
-                <div className="rounded-xl bg-[#faf7f2] border border-[#ded7c8] p-2.5">
-                  <div className="flex items-center justify-between text-[10px] font-semibold text-gray-400 mb-1">
+                <div className="rounded-xl bg-slate-50 border border-slate-200 p-2.5">
+                  <div className="flex items-center justify-between text-[10px] font-semibold text-slate-400 mb-1">
                     <span className="flex items-center gap-1 text-slate-700 font-bold">
                       <ImageIcon className="w-3 h-3" />
                       Prompt visual IA:
@@ -220,7 +202,7 @@ export const Step4Storyboard: React.FC = () => {
                     type="text"
                     value={scene.visualPrompt}
                     onChange={(e) => updateScene(scene.id, { visualPrompt: e.target.value })}
-                    className="w-full bg-transparent text-xs text-gray-800 focus:outline-none placeholder-gray-400 font-medium"
+                    className="w-full bg-transparent text-xs text-slate-800 focus:outline-none placeholder-slate-400 font-medium"
                     placeholder="Descripción visual..."
                   />
                 </div>
@@ -235,7 +217,7 @@ export const Step4Storyboard: React.FC = () => {
         <button
           type="button"
           onClick={() => setStep(requiresScript ? 3 : 2)}
-          className="btn-arena inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all shadow-sm"
+          className="btn-arena inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all shadow-sm"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>{requiresScript ? 'Editar guion' : 'Volver a la idea'}</span>

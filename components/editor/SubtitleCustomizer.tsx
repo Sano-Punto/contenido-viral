@@ -28,7 +28,7 @@ export const SubtitleCustomizer: React.FC = () => {
               className={`cursor-pointer rounded-xl p-3 border transition-all ${
                 isSelected
                   ? 'silver-selected'
-                  : 'bg-[#faf7f2] border-[#ded7c8] hover:border-slate-400'
+                  : 'bg-slate-50 border-slate-200 hover:border-slate-400'
               }`}
             >
               <div className="flex items-center justify-between mb-2">
