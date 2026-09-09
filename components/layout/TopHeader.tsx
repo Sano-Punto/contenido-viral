@@ -8,7 +8,8 @@ import { Plus, Film, Menu } from 'lucide-react';
 const PATH_TITLES: Record<string, { titleMain: string; titleAccent: string }> = {
   '/generador-de-videos': { titleMain: 'Generador de', titleAccent: 'Videos' },
   '/': { titleMain: 'Generador de', titleAccent: 'Videos' },
-  '/estudio-remotion': { titleMain: 'Estudio', titleAccent: 'Remotion' },
+  '/estudio-viral': { titleMain: 'Estudio', titleAccent: 'Viral' },
+  '/estudio-remotion': { titleMain: 'Estudio', titleAccent: 'Viral' },
   '/biblioteca-creaciones': { titleMain: 'Biblioteca de', titleAccent: 'Creaciones' },
   '/formatos-frameworks': { titleMain: 'Formatos &', titleAccent: 'Frameworks' },
   '/biblioteca-medios': { titleMain: 'Biblioteca de', titleAccent: 'Medios' },

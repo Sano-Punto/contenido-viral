@@ -95,7 +95,7 @@ export const CreationsLibraryView: React.FC = () => {
       setScenes(mappedScenes as any);
     }
 
-    router.push('/estudio-remotion');
+    router.push('/estudio-viral');
   };
 
   const handleDownloadVideo = async (proj: SavedProject, e?: React.MouseEvent) => {

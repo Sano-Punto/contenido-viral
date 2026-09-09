@@ -84,9 +84,9 @@ export const RenderQueueView: React.FC = () => {
         </div>
 
         <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
-          <div className="text-[11px] font-semibold text-slate-500">Motor de Video</div>
-          <div className="text-2xl font-bold text-slate-900 mt-1">Remotion</div>
-          <div className="text-[11px] text-emerald-600 font-semibold mt-1">Google Omni Flash</div>
+          <div className="text-[11px] font-semibold text-slate-500">Motor de Composición</div>
+          <div className="text-2xl font-bold text-slate-900 mt-1">Estudio Pro</div>
+          <div className="text-[11px] text-emerald-600 font-semibold mt-1">Render Cinemático 9:16</div>
         </div>
       </div>
 
@@ -151,7 +151,7 @@ export const RenderQueueView: React.FC = () => {
                 <div className="flex items-center gap-2 shrink-0">
                   <button
                     type="button"
-                    onClick={() => router.push('/estudio-remotion')}
+                    onClick={() => router.push('/estudio-viral')}
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-800 text-xs font-semibold border border-slate-200 transition-colors"
                   >
                     <Video className="w-3.5 h-3.5" />

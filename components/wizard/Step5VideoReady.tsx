@@ -129,7 +129,7 @@ export const Step5VideoReady: React.FC = () => {
   };
 
   const handleOpenStudio = () => {
-    router.push('/estudio-remotion');
+    router.push('/estudio-viral');
   };
 
   return (
@@ -303,7 +303,7 @@ export const Step5VideoReady: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <div className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
                     <Sliders className="w-3.5 h-3.5 text-slate-700" />
-                    <span>Opción 2: Edición Avanzada en Remotion</span>
+                    <span>Opción 2: Edición Avanzada en Estudio Viral</span>
                   </div>
                   <span className="text-[10px] font-semibold text-slate-700 bg-[#f1f5f9] px-2 py-0.5 rounded border border-slate-300">
                     Estudio Interactivo
@@ -318,7 +318,7 @@ export const Step5VideoReady: React.FC = () => {
                   className="btn-silver-luxury w-full py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 shadow-sm transition-all"
                 >
                   <Film className="w-4 h-4 text-slate-800" />
-                  <span>Abrir en Estudio Remotion para editar</span>
+                  <span>Abrir en Estudio Viral para editar</span>
                 </button>
               </div>
 
