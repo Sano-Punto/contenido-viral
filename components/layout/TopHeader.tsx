@@ -47,22 +47,8 @@ export const TopHeader: React.FC = () => {
           </h1>
         </div>
 
-        {/* Columna Derecha: Botones de Acción */}
-        <div className="flex items-center justify-end gap-2.5 min-w-[40px]">
-          {pathname !== '/generador-de-videos' && (
-            <button
-              type="button"
-              onClick={() => {
-                resetProject();
-                router.push('/generador-de-videos');
-              }}
-              className="btn-dark-luxury inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs shadow-sm"
-            >
-              <Plus className="w-4 h-4 text-slate-300" />
-              <span className="hidden sm:inline">Nuevo video</span>
-            </button>
-          )}
-        </div>
+        {/* Columna Derecha: Espaciador equilibrado */}
+        <div className="flex items-center justify-end min-w-[40px]" />
       </div>
     </header>
   );
