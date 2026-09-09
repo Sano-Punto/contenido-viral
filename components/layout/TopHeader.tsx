@@ -12,7 +12,6 @@ const PATH_TITLES: Record<string, { titleMain: string; titleAccent: string }> = 
   '/formatos-frameworks': { titleMain: 'Formatos &', titleAccent: 'Frameworks' },
   '/biblioteca-medios': { titleMain: 'Biblioteca de', titleAccent: 'Medios' },
   '/cola-renders': { titleMain: 'Cola de', titleAccent: 'Renders' },
-  '/configuracion-apis': { titleMain: 'Configuración de', titleAccent: 'APIs' },
 };
 
 export const TopHeader: React.FC = () => {

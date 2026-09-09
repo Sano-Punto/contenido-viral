@@ -11,7 +11,6 @@ import {
   Layers,
   FolderOpen,
   ListOrdered,
-  Settings,
   TrendingUp,
   X,
   LogOut,
@@ -30,7 +29,6 @@ const MENU_ITEMS: MenuItem[] = [
   { href: '/formatos-frameworks', label: 'Formatos & frameworks', icon: Layers, badge: '3' },
   { href: '/biblioteca-medios', label: 'Biblioteca de medios', icon: FolderOpen },
   { href: '/cola-renders', label: 'Cola de renders', icon: ListOrdered },
-  { href: '/configuracion-apis', label: 'Configuración & APIs', icon: Settings },
 ];
 
 export const Sidebar: React.FC = () => {
