@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSystemStore } from '@/store/useProjectStore';
 import { SceneDuration } from '@/types';
 import { regenerateSceneVisual } from '@/services/ai/mediaGenerator';
 import { generateWordTimings } from '@/services/ai/subtitlesGenerator';
-import { ArrowLeft, ArrowRight, RefreshCw, Clock, Image as ImageIcon, Sparkles, Video } from 'lucide-react';
+import { ArrowLeft, ArrowRight, RefreshCw, Clock, Video, Camera, Volume2, Mic, Eye } from 'lucide-react';
 
 export const Step4Storyboard: React.FC = () => {
   const { project, frameworks, updateScene, setStep } = useSystemStore();
   const [regeneratingIds, setRegeneratingIds] = useState<Record<string, boolean>>({});
-  const [isCascading, setIsCascading] = useState(false);
+  const [progressMap, setProgressMap] = useState<Record<string, number>>({});
 
   const selectedFw = frameworks.find((f) => f.id === project.frameworkId) || frameworks[0];
   const requiresScript = selectedFw.requiresSpokenScript ?? true;
@@ -29,13 +29,34 @@ export const Step4Storyboard: React.FC = () => {
 
   const handleRegenerateImage = async (sceneId: string, prompt: string) => {
     setRegeneratingIds((prev) => ({ ...prev, [sceneId]: true }));
+    setProgressMap((prev) => ({ ...prev, [sceneId]: 10 }));
+
+    // Simular el efecto de llenado de agua/vaso progresivo (0% -> 100%)
+    const interval = setInterval(() => {
+      setProgressMap((prev) => {
+        const current = prev[sceneId] || 10;
+        if (current >= 90) {
+          clearInterval(interval);
+          return prev;
+        }
+        return { ...prev, [sceneId]: current + Math.floor(Math.random() * 15 + 10) };
+      });
+    }, 300);
+
     try {
       const newMediaUrl = await regenerateSceneVisual(prompt, selectedFw.id);
-      updateScene(sceneId, { mediaUrl: newMediaUrl });
+      setProgressMap((prev) => ({ ...prev, [sceneId]: 100 }));
+      setTimeout(() => {
+        updateScene(sceneId, { mediaUrl: newMediaUrl });
+        setRegeneratingIds((prev) => ({ ...prev, [sceneId]: false }));
+        setProgressMap((prev) => ({ ...prev, [sceneId]: 0 }));
+      }, 400);
     } catch (err) {
       console.error(err);
-    } finally {
       setRegeneratingIds((prev) => ({ ...prev, [sceneId]: false }));
+      setProgressMap((prev) => ({ ...prev, [sceneId]: 0 }));
+    } finally {
+      clearInterval(interval);
     }
   };
 
@@ -43,24 +64,29 @@ export const Step4Storyboard: React.FC = () => {
     setStep(5);
   };
 
+  const ideaText = project.ideaPrompt ? `"${project.ideaPrompt}"` : '';
+
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
-      {/* Header */}
+      {/* Header Superior */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2">
-            <span>Storyboard visual & escenas ({project.scenes.length})</span>
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 flex flex-wrap items-center gap-2">
+            <span>Storyboard visual</span>
+            {ideaText && <span className="text-slate-700 font-semibold">{ideaText}</span>}
+            <span className="text-slate-500 font-normal">({project.scenes.length})</span>
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">
-            Revisa los visuales generados para cada escena. Puedes regenerar las imágenes tantas veces como quieras antes de procesar el video.
+            Revisa los visuales generados para cada escena. Puedes volver a generar las imágenes con el botón dentro de la imagen.
           </p>
         </div>
 
-        <div className="flex items-center gap-3 bg-slate-50 px-4 py-2 rounded-xl border border-slate-200">
+        {/* Duración Total Simplificada (Sin desglose repetido) */}
+        <div className="flex items-center gap-3 bg-slate-50 px-4 py-2.5 rounded-xl border border-slate-200 shrink-0">
           <Clock className="w-4 h-4 text-slate-700" />
           <div className="text-right">
-            <div className="text-[10px] text-slate-400 font-medium">Duración total</div>
-            <div className="text-xs font-bold text-slate-900">{totalDuration}s ({project.scenes.length} clips de {selectedFw.defaultSceneDuration || 8}s)</div>
+            <div className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Duración total</div>
+            <div className="text-sm font-bold text-slate-900">{totalDuration}s</div>
           </div>
         </div>
       </div>
@@ -69,92 +95,138 @@ export const Step4Storyboard: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {project.scenes.map((scene, idx) => {
           const isRegenerating = regeneratingIds[scene.id];
+          const fillPercentage = progressMap[scene.id] || 0;
+
+          // Extracción inteligente de información estructurada por frame
+          const visualConcept = scene.conceptOrReaction || scene.visualPrompt || scene.scriptText;
+          const camera = scene.cameraMovement || (idx === 0 ? 'Toma macro frontal con zoom push-in' : 'Toma macro estable');
+          const asmrSound = scene.asmrFx || 'Efecto crunch-crunch ASMR & destellos ✨';
+          const voiceover = scene.scriptText && scene.scriptText !== scene.subjectOrItem ? scene.scriptText : null;
+          const displayTitle = scene.subjectOrItem || scene.title || `Escena ${idx + 1}`;
 
           return (
             <div
               key={scene.id}
               className="bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col shadow-sm hover:border-slate-400 transition-all"
             >
-              {/* Contenedor Superior: Preview 9:16 y Detalles */}
+              {/* Contenedor Superior: Preview 9:16 y Detalles Coherentes */}
               <div className="p-4 flex gap-4">
-                {/* Visual Thumbnail (Aspect Ratio 9:16) */}
-                <div className="relative w-28 h-48 sm:w-32 sm:h-56 shrink-0 rounded-xl overflow-hidden bg-black border border-slate-200 group">
+                {/* Visual Thumbnail 9:16 con Efecto Llenado de Vaso */}
+                <div className="relative w-32 h-56 shrink-0 rounded-xl overflow-hidden bg-slate-950 border border-slate-200 group select-none">
                   <img
                     src={scene.mediaUrl}
-                    alt={scene.title}
+                    alt={displayTitle}
                     className={`w-full h-full object-cover transition-all duration-300 ${
-                      isRegenerating ? 'opacity-40 scale-105 blur-sm' : 'group-hover:scale-105'
+                      isRegenerating ? 'brightness-50 blur-[2px]' : 'group-hover:scale-105'
                     }`}
                   />
 
+                  {/* Animación de Llenado de Vaso (Liquid Fill Effect) */}
                   {isRegenerating && (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center p-2 text-center bg-black/60">
-                      <RefreshCw className="w-6 h-6 text-white animate-spin mb-1" />
-                      <span className="text-[10px] text-white font-medium">Generando IA...</span>
+                    <div className="absolute inset-0 flex flex-col justify-end pointer-events-none">
+                      <div
+                        className="w-full bg-gradient-to-t from-slate-900 via-slate-800 to-slate-700/80 transition-all duration-300 flex items-center justify-center relative overflow-hidden"
+                        style={{ height: `${fillPercentage}%` }}
+                      >
+                        {/* Onda / Brillo en el borde del agua */}
+                        <div className="absolute top-0 inset-x-0 h-1 bg-white/40 animate-pulse" />
+                      </div>
+                      
+                      {/* Texto e icono flotantes en el centro de la imagen */}
+                      <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-2">
+                        <RefreshCw className="w-6 h-6 text-white animate-spin mb-1.5 drop-shadow-md" />
+                        <span className="text-[11px] font-bold text-white drop-shadow-md">{fillPercentage}%</span>
+                        <span className="text-[9px] font-medium text-slate-200 drop-shadow-md">Generando 3D...</span>
+                      </div>
                     </div>
                   )}
 
                   {/* Badge de Orden */}
-                  <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-sm text-[11px] font-bold text-white border border-white/10">
+                  <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-sm text-[10px] font-bold text-white border border-white/10">
                     Escena {idx + 1}
                   </div>
 
-                  {/* Botón de Regenerar Flotante */}
+                  {/* Botón de Volver a hacer (Regenerar) dentro de la imagen */}
                   <button
                     type="button"
                     disabled={isRegenerating}
                     onClick={() => handleRegenerateImage(scene.id, scene.visualPrompt)}
-                    className="absolute bottom-2 right-2 p-2 rounded-lg bg-black/80 hover:bg-neutral-700 text-white backdrop-blur-sm border border-white/20 transition-all opacity-90 hover:opacity-100 active:scale-95"
-                    title="Regenerar imagen con IA"
+                    className="absolute bottom-2 right-2 p-2 rounded-lg bg-black/80 hover:bg-neutral-800 text-white backdrop-blur-sm border border-white/20 transition-all opacity-95 hover:opacity-100 active:scale-95 shadow-md flex items-center gap-1"
+                    title="Volver a hacer imagen con IA"
                   >
                     <RefreshCw className={`w-3.5 h-3.5 ${isRegenerating ? 'animate-spin' : ''}`} />
                   </button>
                 </div>
 
-                {/* Info y Controles de la Escena */}
-                <div className="flex-1 flex flex-col justify-between space-y-2.5">
-                  <div>
-                    <div className="flex items-center justify-between mb-1.5">
-                      <h3 className="font-bold text-slate-900 text-sm">
-                        {scene.title}
+                {/* Información Coherente y Estandarizada por Frame */}
+                <div className="flex-1 flex flex-col justify-between space-y-2 min-w-0">
+                  <div className="space-y-2">
+                    {/* Titular con el alimento/protagonista */}
+                    <div className="flex items-center justify-between pb-1 border-b border-slate-100">
+                      <h3 className="font-bold text-slate-900 text-sm truncate max-w-[170px]" title={displayTitle}>
+                        {displayTitle}
                       </h3>
                       <span className="text-[10px] font-bold text-slate-700 px-2 py-0.5 rounded bg-slate-100 border border-slate-300">
                         {scene.durationSec}s
                       </span>
                     </div>
 
-                    {/* Desglose de Fruta & Reacción del Órgano si aplica */}
-                    {scene.subjectOrItem && (
-                      <div className="space-y-1 bg-slate-50 p-2 rounded-lg border border-slate-200 mb-2">
-                        <div className="text-[11px] text-slate-800">
-                          <strong className="text-slate-900 font-bold">Elemento/Fruta:</strong> {scene.subjectOrItem}
-                        </div>
-                        {scene.conceptOrReaction && (
-                          <div className="text-[11px] text-slate-600 leading-snug">
-                            <strong className="text-slate-900 font-bold">Reacción:</strong> {scene.conceptOrReaction}
-                          </div>
-                        )}
+                    {/* 1. Concepto Visual */}
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-900">
+                        <Eye className="w-3 h-3 text-slate-700 shrink-0" />
+                        <span>Concepto visual:</span>
                       </div>
-                    )}
-
-                    {!scene.subjectOrItem && (
-                      <p className="text-xs text-slate-700 line-clamp-3 italic leading-relaxed">
-                        "{scene.scriptText}"
+                      <p className="text-[11px] text-slate-600 leading-snug line-clamp-2 pl-4">
+                        {visualConcept}
                       </p>
-                    )}
+                    </div>
+
+                    {/* 2. Movimiento de Cámara */}
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-900">
+                        <Camera className="w-3 h-3 text-slate-700 shrink-0" />
+                        <span>Movimiento de cámara:</span>
+                      </div>
+                      <p className="text-[11px] text-slate-600 leading-snug pl-4">
+                        {camera}
+                      </p>
+                    </div>
+
+                    {/* 3. Efectos de Sonido */}
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-900">
+                        <Volume2 className="w-3 h-3 text-slate-700 shrink-0" />
+                        <span>Efectos de sonido:</span>
+                      </div>
+                      <p className="text-[11px] text-slate-600 leading-snug pl-4">
+                        {asmrSound}
+                      </p>
+                    </div>
+
+                    {/* 4. Locución (Si hay o si no hay) */}
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-900">
+                        <Mic className="w-3 h-3 text-slate-700 shrink-0" />
+                        <span>Locución:</span>
+                      </div>
+                      <p className="text-[11px] text-slate-600 leading-snug pl-4">
+                        {voiceover ? `"${voiceover}"` : <span className="text-slate-400 italic">Sin locución (Efectos ASMR & Música)</span>}
+                      </p>
+                    </div>
                   </div>
 
-                  {/* Duración predeterminada o selector si es variable */}
+                  {/* 5. Control de Video (Duración del clip) */}
                   <div className="pt-2 border-t border-slate-100">
                     {isFixedDuration ? (
-                      <div className="text-[11px] text-slate-600 font-medium flex items-center justify-between">
-                        <span>Duración del clip:</span>
-                        <strong className="text-slate-900 font-bold">{scene.durationSec}s (Predeterminado)</strong>
+                      <div className="text-[10px] text-slate-500 font-medium flex items-center justify-between">
+                        <span>Control de video:</span>
+                        <strong className="text-slate-800 font-semibold">{scene.durationSec}s (Fijo 9:16)</strong>
                       </div>
                     ) : (
                       <div className="space-y-1">
-                        <label className="text-[10px] font-semibold text-slate-400 block">
-                          Duración del clip:
+                        <label className="text-[10px] font-semibold text-slate-500 block">
+                          Control de video (Duración):
                         </label>
                         <div className="flex items-center gap-1.5">
                           {([6, 8, 10] as SceneDuration[]).map((dur) => (
@@ -162,7 +234,7 @@ export const Step4Storyboard: React.FC = () => {
                               key={dur}
                               type="button"
                               onClick={() => handleDurationChange(scene.id, dur)}
-                              className={`flex-1 py-1 text-xs font-semibold rounded-lg border transition-all ${
+                              className={`flex-1 py-1 text-[11px] font-semibold rounded-lg border transition-all ${
                                 scene.durationSec === dur
                                   ? 'btn-silver-luxury shadow-sm'
                                   : 'btn-arena hover:border-slate-400'
@@ -175,34 +247,6 @@ export const Step4Storyboard: React.FC = () => {
                       </div>
                     )}
                   </div>
-                </div>
-              </div>
-
-              {/* Visual Prompt Input Inline para Regenerar */}
-              <div className="px-4 pb-4 pt-1">
-                <div className="rounded-xl bg-slate-50 border border-slate-200 p-2.5">
-                  <div className="flex items-center justify-between text-[10px] font-semibold text-slate-400 mb-1">
-                    <span className="flex items-center gap-1 text-slate-700 font-bold">
-                      <ImageIcon className="w-3 h-3" />
-                      Prompt visual IA:
-                    </span>
-                    <button
-                      type="button"
-                      disabled={isRegenerating}
-                      onClick={() => handleRegenerateImage(scene.id, scene.visualPrompt)}
-                      className="text-slate-800 hover:text-black font-bold transition-colors flex items-center gap-1"
-                    >
-                      <RefreshCw className="w-2.5 h-2.5" />
-                      <span>Regenerar imagen</span>
-                    </button>
-                  </div>
-                  <input
-                    type="text"
-                    value={scene.visualPrompt}
-                    onChange={(e) => updateScene(scene.id, { visualPrompt: e.target.value })}
-                    className="w-full bg-transparent text-xs text-slate-800 focus:outline-none placeholder-slate-400 font-medium"
-                    placeholder="Descripción visual..."
-                  />
                 </div>
               </div>
             </div>
