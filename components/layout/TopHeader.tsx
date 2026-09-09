@@ -3,7 +3,7 @@
 import React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useSystemStore } from '@/store/useProjectStore';
-import { Plus, Film, Menu } from 'lucide-react';
+import { Plus, Film, Menu, Sparkles } from 'lucide-react';
 
 const PATH_TITLES: Record<string, { titleMain: string; titleAccent: string }> = {
   '/generador-de-videos': { titleMain: 'Generador de', titleAccent: 'Videos' },
@@ -22,27 +22,37 @@ export const TopHeader: React.FC = () => {
   const info = PATH_TITLES[pathname] || { titleMain: 'Viral Studios', titleAccent: 'Plataforma' };
 
   return (
-    <header className="sticky top-0 z-20 bg-[#f6f3eb]/95 backdrop-blur-md border-b border-[#e2dcce] px-4 sm:px-6 py-3.5">
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
+    <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-slate-200/80 px-4 sm:px-8 py-4 sm:py-5 shadow-xs transition-all">
+      <div className="flex items-center justify-between relative w-full">
+        {/* Columna Izquierda: Botón Hamburguesa en Móvil / Indicador en Desktop */}
+        <div className="flex items-center gap-3 min-w-[40px]">
           <button
             type="button"
             onClick={toggleMobileMenu}
-            className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-[#ede8dc] transition-colors"
+            className="md:hidden p-2 rounded-xl text-slate-700 hover:bg-slate-100 transition-colors border border-slate-200"
             aria-label="Abrir menú"
           >
             <Menu className="w-5 h-5" />
           </button>
 
-          <h1 className="text-lg sm:text-xl font-bold text-[#14141e] tracking-tight">
-            {info.titleMain}{' '}
-            <span className="font-serif italic font-semibold text-silver-shine">
+          <div className="hidden md:flex items-center gap-2 text-xs font-semibold text-slate-400">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="tracking-wide uppercase text-[10px] text-slate-400 font-bold">Studio Active</span>
+          </div>
+        </div>
+
+        {/* Columna Central: Título Centrado y Destacado */}
+        <div className="flex-1 text-center px-2">
+          <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center justify-center gap-2">
+            <span>{info.titleMain}</span>
+            <span className="font-serif italic font-extrabold text-silver-shine drop-shadow-sm">
               {info.titleAccent}
             </span>
           </h1>
         </div>
 
-        <div className="flex items-center gap-2">
+        {/* Columna Derecha: Botones de Acción */}
+        <div className="flex items-center justify-end gap-2.5 min-w-[40px]">
           {pathname !== '/generador-de-videos' && (
             <button
               type="button"
@@ -50,9 +60,9 @@ export const TopHeader: React.FC = () => {
                 resetProject();
                 router.push('/generador-de-videos');
               }}
-              className="btn-dark-luxury inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs shadow-sm"
+              className="btn-dark-luxury inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs shadow-sm"
             >
-              <Plus className="w-3.5 h-3.5" />
+              <Plus className="w-4 h-4 text-slate-300" />
               <span className="hidden sm:inline">Nuevo video</span>
             </button>
           )}
@@ -61,9 +71,9 @@ export const TopHeader: React.FC = () => {
             <button
               type="button"
               onClick={() => router.push('/estudio-remotion')}
-              className="btn-silver-luxury inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs shadow-sm"
+              className="btn-silver-luxury inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs shadow-sm"
             >
-              <Film className="w-3.5 h-3.5" />
+              <Film className="w-4 h-4 text-slate-800" />
               <span className="hidden sm:inline">Estudio</span>
             </button>
           )}

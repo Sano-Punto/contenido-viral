@@ -10,7 +10,7 @@ import React from 'react';
 export const ContentWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <>
-      <div id="content-wrapper" className="flex flex-col min-h-screen bg-[#f6f3eb] w-full min-w-0">
+      <div id="content-wrapper" className="flex flex-col min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white via-slate-50/90 to-slate-100/70 w-full min-w-0">
         {children}
       </div>
       <style>{`

@@ -14,7 +14,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-[#f6f3eb] text-[#1f1f2e] min-h-screen flex w-full">
+    <div className="bg-slate-50 text-slate-900 min-h-screen flex w-full">
       <Sidebar />
       <ContentWrapper>
         <TopHeader />
