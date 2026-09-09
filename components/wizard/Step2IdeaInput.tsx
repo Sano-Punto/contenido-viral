@@ -41,7 +41,7 @@ const getPlaceholderByFramework = (frameworkId: string): string => {
 };
 
 export const Step2IdeaInput: React.FC = () => {
-  const { project, frameworks, setIdeaDetails, setScenes, setStep, setLoading, isLoading } = useSystemStore();
+  const { project, frameworks, setIdeaDetails, setScenes, setStep, setLoading, isLoading, generatingStep } = useSystemStore();
   
   const selectedFw = frameworks.find((f) => f.id === project.frameworkId) || frameworks[0];
   const requiresScript = selectedFw.requiresSpokenScript ?? true;
@@ -101,6 +101,62 @@ export const Step2IdeaInput: React.FC = () => {
       setLoading(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6 max-w-2xl mx-auto">
+        <div className="text-center space-y-1.5">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full silver-selected text-xs font-semibold text-slate-800">
+            <span>Formato seleccionado:</span>
+            <strong className="text-slate-950 font-bold">{selectedFw.name}</strong>
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+            Generando storyboard de escenas con IA
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-500">
+            {generatingStep || 'Diseñando conceptos visuales y estructurando la animación de escenas...'}
+          </p>
+        </div>
+
+        <div className="bg-white border border-slate-200 rounded-2xl p-8 sm:p-10 shadow-sm text-center space-y-6">
+          <div className="relative w-16 h-16 mx-auto flex items-center justify-center">
+            <div className="w-full h-full rounded-full border-4 border-slate-200 border-t-slate-900 animate-spin" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Sparkles className="w-6 h-6 text-slate-700 animate-pulse" />
+            </div>
+          </div>
+
+          <div className="max-w-md mx-auto space-y-2">
+            <h3 className="text-sm font-bold text-slate-900 leading-snug">
+              Procesando idea: <span className="font-semibold text-slate-700">"{idea}"</span>
+            </h3>
+            <p className="text-xs text-slate-500">
+              Generando {scenesCount} escenas visuales con IA
+            </p>
+          </div>
+
+          <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 text-left space-y-2.5 max-w-md mx-auto">
+            <div className="flex items-center gap-2.5 text-xs text-slate-700 font-medium">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+              <span>Estructurando conceptos biológicos y retención</span>
+            </div>
+            <div className="flex items-center gap-2.5 text-xs text-slate-700 font-medium">
+              <div className="w-2 h-2 rounded-full bg-slate-900 animate-pulse shrink-0" />
+              <span>Generando renders 3D para cada una de las {scenesCount} escenas</span>
+            </div>
+            <div className="flex items-center gap-2.5 text-xs text-slate-400 font-medium">
+              <div className="w-2 h-2 rounded-full bg-slate-300 shrink-0" />
+              <span>Sincronizando escenas para el storyboard</span>
+            </div>
+          </div>
+
+          <p className="text-[11px] text-slate-400 font-medium pt-2">
+            Por favor espera unos segundos mientras la IA completa los renders y la estructura del video...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 max-w-3xl mx-auto">

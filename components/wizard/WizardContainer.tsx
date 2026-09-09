@@ -76,46 +76,7 @@ export const WizardContainer: React.FC = () => {
         })}
       </div>
 
-      {/* Centered Loading Modal */}
-      {isLoading && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-[#12131c] text-white p-6 sm:p-8 rounded-3xl shadow-2xl border border-white/10 max-w-md w-full mx-auto text-center space-y-5 animate-in zoom-in-95 duration-200">
-            <div className="relative w-16 h-16 mx-auto flex items-center justify-center">
-              <div className="absolute inset-0 rounded-full border-4 border-slate-700 border-t-sky-400 animate-spin" />
-              <Sparkles className="w-6 h-6 text-sky-400 animate-pulse" />
-            </div>
 
-            <div className="space-y-1.5">
-              <h3 className="text-lg font-bold text-white tracking-tight flex items-center justify-center gap-1.5">
-                Generando con IA
-              </h3>
-              <p className="text-xs text-slate-300 leading-relaxed max-w-xs mx-auto">
-                {generatingStep || 'Diseñando conceptos visuales y generando imagen maestra...'}
-              </p>
-            </div>
-
-            {/* Micro steps indicator */}
-            <div className="bg-white/5 border border-white/10 rounded-xl p-3 text-left space-y-2">
-              <div className="flex items-center gap-2 text-[11px] text-slate-300">
-                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-                <span>Estructurando conceptos biológicos y retención</span>
-              </div>
-              <div className="flex items-center gap-2 text-[11px] text-slate-300">
-                <div className="w-2 h-2 rounded-full bg-sky-400 animate-pulse shrink-0" />
-                <span>Generando render 3D con gemini-3-pro-image</span>
-              </div>
-              <div className="flex items-center gap-2 text-[11px] text-slate-400">
-                <div className="w-2 h-2 rounded-full bg-slate-500 shrink-0" />
-                <span>Sincronizando escenas para el storyboard</span>
-              </div>
-            </div>
-
-            <div className="text-[10px] text-slate-400 font-medium">
-              Por favor espera unos segundos mientras la IA completa los renders...
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Step content */}
       <div>
