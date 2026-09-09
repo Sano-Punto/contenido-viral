@@ -1,33 +1,43 @@
 import React, { useState } from 'react';
 import { useSystemStore } from '@/store/useProjectStore';
 import { generateViralScript } from '@/services/ai/scriptGenerator';
-import { Sparkles, ArrowLeft, ArrowRight, Lightbulb } from 'lucide-react';
+import { Sparkles, ArrowLeft, ArrowRight, Lightbulb, Film } from 'lucide-react';
 
-const INSPIRATIONS_BY_FRAMEWORK: Record<string, string[]> = {
+interface InspirationItem {
+  text: string;
+  scenes: number;
+}
+
+const INSPIRATIONS_BY_FRAMEWORK: Record<string, InspirationItem[]> = {
   'super-alimentos': [
-    '5 Super alimentos para rescatar y activar tu tiroides cansada.',
-    'Los 4 mejores alimentos para regenerar hepatocitos y limpiar tu hígado.',
-    'Frutas ricas en antocianinas que potencian la memoria y el cerebro.',
-    'Alimentos con probióticos y fibra soluble para restaurar tu intestino.',
+    { text: '6 super alimentos para tus orejas', scenes: 6 },
+    { text: '3 super alimentos para tu riñón', scenes: 3 },
   ],
   'alimentos-que-retan': [
-    '3 Alimentos cotidianos que saturan de grasa y fatigan tu hígado.',
-    'Grasas trans y ultraprocesados que inflaman tus arterias coronarias.',
-    'Bebidas azucaradas que agotan las células de tu páncreas y estómago.',
-    'Exceso de sodio y harinas refinadas que retan tus riñones.',
+    { text: '5 alimentos que retan tus riñones', scenes: 5 },
+    { text: '4 alimentos que retan tus ojos', scenes: 4 },
   ],
   'que-sucede-al-comer': [
-    'Qué sucede realmente dentro de ti al tomar un vaso de gaseosa oscura.',
-    'El viaje interno cinematográfico de una porción de papas fritas.',
-    'Recorrido biológico paso a paso al consumir café en ayunas.',
-    'Qué ocurre en tus células y sangre al tomar agua con limón y chía.',
+    { text: '4 cosas que suceden en tu cuerpo al comer aguacate', scenes: 4 },
+    { text: '3 cambios biológicos al tomar agua con limón y chía', scenes: 3 },
   ],
   default: [
-    'Qué le pasa a tu cerebro y memoria cuando comes arándanos en ayunas.',
-    'El efecto oculto del limón con agua tibia en el hígado graso.',
-    'La fruta que repara las arterias del corazón según estudios recientes.',
-    'Por qué los atletas consumen plátano antes de entrenamientos intensos.',
+    { text: '6 super alimentos para tus orejas', scenes: 6 },
+    { text: '3 super alimentos para tu riñón', scenes: 3 },
   ],
+};
+
+const getPlaceholderByFramework = (frameworkId: string): string => {
+  switch (frameworkId) {
+    case 'alimentos-que-retan':
+      return 'Ejemplo: Alimentos que retan esto... (ej. 5 alimentos que retan tus riñones)';
+    case 'super-alimentos':
+      return 'Ejemplo: Super alimentos para... (ej. 6 super alimentos para tus orejas)';
+    case 'que-sucede-al-comer':
+      return 'Ejemplo: Qué sucede en tu cuerpo al comer... (ej. 4 cosas que suceden al comer aguacate)';
+    default:
+      return 'Ejemplo: Super alimentos para...';
+  }
 };
 
 export const Step2IdeaInput: React.FC = () => {
@@ -36,19 +46,22 @@ export const Step2IdeaInput: React.FC = () => {
   const selectedFw = frameworks.find((f) => f.id === project.frameworkId) || frameworks[0];
   const requiresScript = selectedFw.requiresSpokenScript ?? true;
 
+  const defaultInspiration = INSPIRATIONS_BY_FRAMEWORK[selectedFw.id]?.[0] || INSPIRATIONS_BY_FRAMEWORK.default[0];
+
   const [idea, setIdea] = useState(
-    project.ideaPrompt ||
-    (selectedFw.id === 'super-alimentos'
-      ? '5 Super alimentos para activar y regenerar la tiroides'
-      : selectedFw.id === 'alimentos-que-retan'
-      ? '3 Alimentos cotidianos que dañan e inflaman tu hígado'
-      : selectedFw.id === 'que-sucede-al-comer'
-      ? 'Qué sucede en tu cuerpo cuando tomas un vaso de gaseosa oscura'
-      : '')
+    project.ideaPrompt || defaultInspiration.text
   );
-  const [scenesCount, setScenesCount] = useState<number>(project.scenesCount || selectedFw.recommendedScenes || 4);
+  const [scenesCount, setScenesCount] = useState<number>(
+    project.scenesCount || defaultInspiration.scenes
+  );
 
   const inspirations = INSPIRATIONS_BY_FRAMEWORK[selectedFw.id] || INSPIRATIONS_BY_FRAMEWORK.default;
+  const placeholderText = getPlaceholderByFramework(selectedFw.id);
+
+  const handleSelectInspiration = (item: InspirationItem) => {
+    setIdea(item.text);
+    setScenesCount(item.scenes);
+  };
 
   const handleGenerateScenes = async () => {
     if (!idea.trim()) return;
@@ -116,28 +129,46 @@ export const Step2IdeaInput: React.FC = () => {
             rows={3}
             value={idea}
             onChange={(e) => setIdea(e.target.value)}
-            placeholder="Ejemplo: Qué le pasa a tu hígado y cerebro cuando tomas papaya con semillas..."
+            placeholder={placeholderText}
             className="w-full rounded-xl bg-slate-50 border border-slate-200 p-3.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-400 focus:bg-white transition-all resize-none"
           />
         </div>
 
-        {/* Ideas Rápidas de Inspiración */}
+        {/* Ideas Rápidas de Inspiración (Exactamente 2) */}
         <div className="space-y-2">
           <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-700">
             <Lightbulb className="w-3.5 h-3.5 text-slate-600" />
-            <span>Ideas sugeridas para este formato (haz clic para aplicar):</span>
+            <span>Ideas sugeridas para este formato (haz clic para aplicar e indicar escenas):</span>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            {inspirations.map((item, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => setIdea(item)}
-                className="text-left text-xs p-3 rounded-xl bg-slate-50 border border-slate-200 hover:border-slate-400 hover:bg-white text-slate-700 transition-all line-clamp-2"
-              >
-                {item}
-              </button>
-            ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {inspirations.map((item, idx) => {
+              const isActive = idea === item.text && scenesCount === item.scenes;
+
+              return (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => handleSelectInspiration(item)}
+                  className={`text-left text-xs p-3.5 rounded-xl border transition-all flex items-center justify-between gap-3 group cursor-pointer ${
+                    isActive
+                      ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
+                      : 'bg-slate-50 border-slate-200 hover:border-slate-400 hover:bg-white text-slate-700'
+                  }`}
+                >
+                  <span className="font-medium leading-snug">{item.text}</span>
+                  <span
+                    className={`text-[10px] font-bold px-2 py-0.5 rounded-md shrink-0 flex items-center gap-1 ${
+                      isActive
+                        ? 'bg-slate-800 text-slate-200 border border-slate-700'
+                        : 'bg-white text-slate-600 border border-slate-200 group-hover:border-slate-300'
+                    }`}
+                  >
+                    <Film className="w-3 h-3" />
+                    {item.scenes} escenas
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
