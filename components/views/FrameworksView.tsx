@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSystemStore } from '@/store/useProjectStore';
 import { Sparkles } from 'lucide-react';
 
 export const FrameworksView: React.FC = () => {
