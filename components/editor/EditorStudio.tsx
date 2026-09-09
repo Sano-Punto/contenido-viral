@@ -7,11 +7,13 @@ import { ViralVideoComposition } from '@/components/remotion/ViralVideoCompositi
 import { TimelineEditor } from './TimelineEditor';
 import { SubtitleCustomizer } from './SubtitleCustomizer';
 import { AudioControls } from './AudioControls';
+import { useRouter } from 'next/navigation';
 import { Download, Type, Music, ArrowLeft, CheckCircle, Layers } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export const EditorStudio: React.FC = () => {
-  const { project, setStep, setActiveView } = useSystemStore();
+  const router = useRouter();
+  const { project, setStep } = useSystemStore();
   const playerRef = useRef<PlayerRef>(null);
   const [activeTab, setActiveTab] = useState<'subtitles' | 'audio' | 'scenes'>('subtitles');
   const [currentFrame, setCurrentFrame] = useState(0);
@@ -59,7 +61,7 @@ export const EditorStudio: React.FC = () => {
             type="button"
             onClick={() => {
               setStep(4);
-              setActiveView('generator');
+              router.push('/generador-de-videos');
             }}
             className="btn-arena p-2 rounded-xl transition-all"
             title="Volver al Storyboard"

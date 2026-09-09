@@ -18,8 +18,10 @@ import {
   Check,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { useRouter } from 'next/navigation';
 
 export const Step5VideoReady: React.FC = () => {
+  const router = useRouter();
   const { project, setStep, setActiveView, resetProject, updateScene } = useSystemStore();
   const playerRef = useRef<PlayerRef>(null);
 
@@ -124,7 +126,7 @@ export const Step5VideoReady: React.FC = () => {
   };
 
   const handleOpenStudio = () => {
-    setActiveView('editor');
+    router.push('/estudio-remotion');
   };
 
   return (

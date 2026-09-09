@@ -1,7 +1,10 @@
 'use client';
 
 import React from 'react';
-import { useSystemStore, SystemView } from '@/store/useProjectStore';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useSystemStore } from '@/store/useProjectStore';
+import { createClient } from '@/lib/supabase/client';
 import {
   Wand2,
   Film,
@@ -11,32 +14,38 @@ import {
   Settings,
   TrendingUp,
   X,
-  Activity,
   LogOut,
 } from 'lucide-react';
 
 interface MenuItem {
-  id: SystemView;
+  href: string;
   label: string;
   icon: React.ComponentType<{ className?: string }>;
   badge?: string;
 }
 
 const MENU_ITEMS: MenuItem[] = [
-  { id: 'generator', label: 'Generador de videos', icon: Wand2, badge: 'IA' },
-  { id: 'editor', label: 'Estudio Remotion', icon: Film },
-  { id: 'frameworks', label: 'Formatos & frameworks', icon: Layers, badge: '3' },
-  { id: 'media-library', label: 'Biblioteca de medios', icon: FolderOpen },
-  { id: 'render-queue', label: 'Cola de renders', icon: ListOrdered },
-  { id: 'ai-settings', label: 'Configuración & APIs', icon: Settings },
+  { href: '/generador-de-videos', label: 'Generador de videos', icon: Wand2, badge: 'IA' },
+  { href: '/estudio-remotion', label: 'Estudio Remotion', icon: Film },
+  { href: '/formatos-frameworks', label: 'Formatos & frameworks', icon: Layers, badge: '3' },
+  { href: '/biblioteca-medios', label: 'Biblioteca de medios', icon: FolderOpen },
+  { href: '/cola-renders', label: 'Cola de renders', icon: ListOrdered },
+  { href: '/configuracion-apis', label: 'Configuración & APIs', icon: Settings },
 ];
 
 export const Sidebar: React.FC = () => {
-  const { activeView, setActiveView, isMobileMenuOpen, setMobileMenuOpen } = useSystemStore();
+  const pathname = usePathname();
+  const { isMobileMenuOpen, setMobileMenuOpen } = useSystemStore();
 
-  const handleSelectView = (view: SystemView) => {
-    setActiveView(view);
-    setMobileMenuOpen(false);
+  const handleLogout = async () => {
+    try {
+      const supabase = createClient();
+      await supabase.auth.signOut();
+    } catch (err) {
+      console.error('Error cerrando sesión:', err);
+    } finally {
+      window.location.href = '/login';
+    }
   };
 
   const SidebarContent = (
@@ -44,8 +53,12 @@ export const Sidebar: React.FC = () => {
       <div>
         {/* Header / Logo con línea en ascendencia y nombre Viral Studios con gradiente plateado */}
         <div className="p-5 border-b border-[#1c1e26] flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#2d303a] via-[#565b6e] to-[#a8b1c4] flex items-center justify-center shadow-lg shadow-black/50 border border-white/20 shrink-0">
+          <Link
+            href="/generador-de-videos"
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex items-center gap-3 group"
+          >
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#2d303a] via-[#565b6e] to-[#a8b1c4] flex items-center justify-center shadow-lg shadow-black/50 border border-white/20 shrink-0 group-hover:scale-105 transition-transform">
               <TrendingUp className="w-5 h-5 text-white stroke-[2.5]" />
             </div>
             <div>
@@ -63,13 +76,14 @@ export const Sidebar: React.FC = () => {
                 Generación de Videos con IA
               </div>
             </div>
-          </div>
+          </Link>
 
           {/* Botón de Cerrar en Móvil */}
           <button
             type="button"
             onClick={() => setMobileMenuOpen(false)}
             className="md:hidden p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-[#1c1e26] transition-colors"
+            aria-label="Cerrar menú"
           >
             <X className="w-5 h-5" />
           </button>
@@ -78,17 +92,17 @@ export const Sidebar: React.FC = () => {
         {/* Espaciado antes del nav */}
         <div className="pt-4" />
 
-        {/* Lista de Navegación con toque silver de lujo */}
+        {/* Lista de Navegación con enlace nativo Next.js y estilo de lujo */}
         <nav className="px-3 space-y-1 pt-2">
           {MENU_ITEMS.map((item) => {
             const Icon = item.icon;
-            const isActive = activeView === item.id;
+            const isActive = pathname === item.href || (item.href === '/generador-de-videos' && pathname === '/');
 
             return (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => handleSelectView(item.id)}
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setMobileMenuOpen(false)}
                 className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all group ${
                   isActive
                     ? 'bg-white/10 text-white border border-white/20 shadow-sm font-semibold'
@@ -115,7 +129,7 @@ export const Sidebar: React.FC = () => {
                     {item.badge}
                   </span>
                 )}
-              </button>
+              </Link>
             );
           })}
         </nav>
@@ -125,15 +139,10 @@ export const Sidebar: React.FC = () => {
       <div className="p-4 border-t border-[#1c1e26] space-y-2">
         <button
           type="button"
-          onClick={async () => {
-            const { createClient } = await import('@/lib/supabase/client');
-            const supabase = createClient();
-            await supabase.auth.signOut();
-            window.location.href = '/login';
-          }}
-          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-red-400 hover:bg-red-950/20 transition-all group border border-transparent hover:border-red-900/30"
+          onClick={handleLogout}
+          className="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-red-400 hover:bg-red-950/20 transition-all group border border-transparent hover:border-red-900/30 active:scale-[0.98]"
         >
-          <LogOut className="w-3.5 h-3.5 group-hover:text-red-400" />
+          <LogOut className="w-4 h-4 group-hover:text-red-400 transition-colors" />
           <span>Cerrar Sesión</span>
         </button>
         <div className="text-[10px] text-gray-600 text-center">

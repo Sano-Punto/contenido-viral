@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useSystemStore } from '@/store/useProjectStore';
+import { useRouter } from 'next/navigation';
 import { Sparkles } from 'lucide-react';
 
 export const FrameworksView: React.FC = () => {
-  const { frameworks, selectFramework, setActiveView, setStep } = useSystemStore();
+  const router = useRouter();
+  const { frameworks, selectFramework, setStep } = useSystemStore();
   const [selectedFwId, setSelectedFwId] = useState<string>(frameworks[0]?.id || '');
 
   const activeFramework = frameworks.find((f) => f.id === selectedFwId) || frameworks[0];
@@ -13,7 +14,7 @@ export const FrameworksView: React.FC = () => {
   const handleUseFramework = (id: string) => {
     selectFramework(id);
     setStep(2);
-    setActiveView('generator');
+    router.push('/generador-de-videos');
   };
 
   return (

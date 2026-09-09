@@ -1,26 +1,21 @@
 'use client';
 
-import React from 'react';
-import { useSystemStore } from '@/store/useProjectStore';
-import { WizardContainer } from '@/components/wizard/WizardContainer';
-import { EditorStudio } from '@/components/editor/EditorStudio';
-import { FrameworksView } from '@/components/views/FrameworksView';
-import { RenderQueueView } from '@/components/views/RenderQueueView';
-import { MediaLibraryView } from '@/components/views/MediaLibraryView';
-import { AiSettingsView } from '@/components/views/AiSettingsView';
-import { LogsView } from '@/components/logs/LogsView';
-export default function SystemMainApp() {
-  const { activeView } = useSystemStore();
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
+export default function DashboardRootPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace('/generador-de-videos');
+  }, [router]);
 
   return (
-    <div className="w-full">
-      {activeView === 'generator' && <WizardContainer />}
-      {activeView === 'editor' && <EditorStudio />}
-      {activeView === 'frameworks' && <FrameworksView />}
-      {activeView === 'render-queue' && <RenderQueueView />}
-      {activeView === 'media-library' && <MediaLibraryView />}
-      {activeView === 'ai-settings' && <AiSettingsView />}
-      {activeView === 'logs' && <LogsView />}
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <div className="flex flex-col items-center gap-3">
+        <div className="w-8 h-8 rounded-full border-2 border-slate-300 border-t-slate-800 animate-spin" />
+        <span className="text-xs text-slate-500 font-medium">Cargando Viral Studios...</span>
+      </div>
     </div>
   );
 }

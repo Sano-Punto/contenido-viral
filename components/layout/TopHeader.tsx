@@ -1,22 +1,26 @@
 'use client';
 
 import React from 'react';
-import { useSystemStore, SystemView } from '@/store/useProjectStore';
+import { usePathname, useRouter } from 'next/navigation';
+import { useSystemStore } from '@/store/useProjectStore';
 import { Plus, Film, Menu } from 'lucide-react';
 
-const VIEW_TITLES: Record<SystemView, { titleMain: string; titleAccent: string }> = {
-  generator: { titleMain: 'Generador de', titleAccent: 'Videos' },
-  editor: { titleMain: 'Estudio', titleAccent: 'Remotion' },
-  frameworks: { titleMain: 'Formatos &', titleAccent: 'Frameworks' },
-  'media-library': { titleMain: 'Biblioteca de', titleAccent: 'Medios' },
-  'render-queue': { titleMain: 'Cola de', titleAccent: 'Renders' },
-  'ai-settings': { titleMain: 'Configuración de', titleAccent: 'APIs' },
-  logs: { titleMain: 'Logs &', titleAccent: 'Trazabilidad' },
+const PATH_TITLES: Record<string, { titleMain: string; titleAccent: string }> = {
+  '/generador-de-videos': { titleMain: 'Generador de', titleAccent: 'Videos' },
+  '/': { titleMain: 'Generador de', titleAccent: 'Videos' },
+  '/estudio-remotion': { titleMain: 'Estudio', titleAccent: 'Remotion' },
+  '/formatos-frameworks': { titleMain: 'Formatos &', titleAccent: 'Frameworks' },
+  '/biblioteca-medios': { titleMain: 'Biblioteca de', titleAccent: 'Medios' },
+  '/cola-renders': { titleMain: 'Cola de', titleAccent: 'Renders' },
+  '/configuracion-apis': { titleMain: 'Configuración de', titleAccent: 'APIs' },
 };
 
 export const TopHeader: React.FC = () => {
-  const { activeView, setActiveView, resetProject, project, toggleMobileMenu } = useSystemStore();
-  const info = VIEW_TITLES[activeView] || VIEW_TITLES.generator;
+  const pathname = usePathname();
+  const router = useRouter();
+  const { resetProject, project, toggleMobileMenu } = useSystemStore();
+
+  const info = PATH_TITLES[pathname] || { titleMain: 'Viral Studios', titleAccent: 'Plataforma' };
 
   return (
     <header className="sticky top-0 z-20 bg-[#f6f3eb]/95 backdrop-blur-md border-b border-[#e2dcce] px-4 sm:px-6 py-3.5">
@@ -40,12 +44,12 @@ export const TopHeader: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          {activeView !== 'generator' && (
+          {pathname !== '/generador-de-videos' && (
             <button
               type="button"
               onClick={() => {
                 resetProject();
-                setActiveView('generator');
+                router.push('/generador-de-videos');
               }}
               className="btn-dark-luxury inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs shadow-sm"
             >
@@ -54,10 +58,10 @@ export const TopHeader: React.FC = () => {
             </button>
           )}
 
-          {project.scenes.length > 0 && activeView !== 'editor' && (
+          {project.scenes.length > 0 && pathname !== '/estudio-remotion' && (
             <button
               type="button"
-              onClick={() => setActiveView('editor')}
+              onClick={() => router.push('/estudio-remotion')}
               className="btn-silver-luxury inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs shadow-sm"
             >
               <Film className="w-3.5 h-3.5" />

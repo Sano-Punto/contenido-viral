@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useSystemStore } from '@/store/useProjectStore';
 import {
   ListOrdered,
@@ -22,7 +23,8 @@ interface ProjectJob {
 }
 
 export const RenderQueueView: React.FC = () => {
-  const { project, setActiveView } = useSystemStore();
+  const router = useRouter();
+  const { project } = useSystemStore();
   const [dbProjects, setDbProjects] = useState<ProjectJob[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -104,7 +106,7 @@ export const RenderQueueView: React.FC = () => {
 
           <button
             type="button"
-            onClick={() => setActiveView('generator')}
+            onClick={() => router.push('/generador-de-videos')}
             className="btn-dark-luxury inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs shadow-sm"
           >
             <Sparkles className="w-3.5 h-3.5 text-slate-200" />
@@ -150,7 +152,7 @@ export const RenderQueueView: React.FC = () => {
                 <div className="flex items-center gap-2 shrink-0">
                   <button
                     type="button"
-                    onClick={() => setActiveView('editor')}
+                    onClick={() => router.push('/estudio-remotion')}
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-[#eae5da] text-gray-800 text-xs font-semibold border border-[#ded7c8] transition-colors"
                   >
                     <Video className="w-3.5 h-3.5" />
