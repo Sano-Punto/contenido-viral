@@ -36,11 +36,11 @@ export const TopHeader: React.FC = () => {
           </button>
         </div>
 
-        {/* Columna Central: Título Centrado y Destacado con amplio espacio superior */}
+        {/* Columna Central: Título Centrado y Destacado con alineación de línea de base perfecta */}
         <div className="flex-1 text-center px-2">
-          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight flex items-center justify-center gap-2">
-            <span>{info.titleMain}</span>
-            <span className="font-serif italic font-extrabold text-silver-shine drop-shadow-sm">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight flex items-baseline justify-center gap-2">
+            <span className="leading-none">{info.titleMain}</span>
+            <span className="font-serif italic font-extrabold text-silver-shine drop-shadow-sm leading-none -translate-y-[3px] sm:-translate-y-[4px]">
               {info.titleAccent}
             </span>
           </h1>
