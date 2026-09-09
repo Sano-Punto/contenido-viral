@@ -53,7 +53,7 @@ export async function middleware(request: NextRequest) {
           })
           supabaseResponse.cookies.set({
             name,
-            value,
+            value: '',
             ...options,
           })
         },
