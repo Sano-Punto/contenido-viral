@@ -20,13 +20,12 @@ interface MenuItem {
   href: string;
   label: string;
   icon: React.ComponentType<{ className?: string }>;
-  badge?: string;
 }
 
 const MENU_ITEMS: MenuItem[] = [
-  { href: '/generador-de-videos', label: 'Generador de videos', icon: Wand2, badge: 'IA' },
+  { href: '/generador-de-videos', label: 'Generador de videos', icon: Wand2 },
   { href: '/estudio-remotion', label: 'Estudio Remotion', icon: Film },
-  { href: '/formatos-frameworks', label: 'Formatos & frameworks', icon: Layers, badge: '3' },
+  { href: '/formatos-frameworks', label: 'Formatos & frameworks', icon: Layers },
   { href: '/biblioteca-medios', label: 'Biblioteca de medios', icon: FolderOpen },
   { href: '/cola-renders', label: 'Cola de renders', icon: ListOrdered },
 ];
@@ -90,8 +89,8 @@ export const Sidebar: React.FC = () => {
         {/* Espaciado antes del nav */}
         <div className="pt-4" />
 
-        {/* Lista de Navegación con enlace nativo Next.js y estilo de lujo */}
-        <nav className="px-3 space-y-1 pt-2">
+        {/* Lista de Navegación limpia y minimalista */}
+        <nav className="px-3 space-y-1.5 pt-2">
           {MENU_ITEMS.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href || (item.href === '/generador-de-videos' && pathname === '/');
@@ -101,32 +100,18 @@ export const Sidebar: React.FC = () => {
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all group ${
+                className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all group ${
                   isActive
                     ? 'bg-white/10 text-white border border-white/20 shadow-sm font-semibold'
                     : 'text-gray-400 hover:text-gray-200 hover:bg-[#161720]'
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <Icon
-                    className={`w-4 h-4 transition-colors ${
-                      isActive ? 'text-slate-200' : 'text-gray-400 group-hover:text-gray-300'
-                    }`}
-                  />
-                  <span>{item.label}</span>
-                </div>
-
-                {item.badge && (
-                  <span
-                    className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                      isActive
-                        ? 'bg-[#2b2d38] text-slate-200 border border-[#484b5c]'
-                        : 'bg-[#181922] text-gray-400 border border-[#262836]'
-                    }`}
-                  >
-                    {item.badge}
-                  </span>
-                )}
+                <Icon
+                  className={`w-4 h-4 transition-colors ${
+                    isActive ? 'text-slate-200' : 'text-gray-400 group-hover:text-gray-300'
+                  }`}
+                />
+                <span>{item.label}</span>
               </Link>
             );
           })}
@@ -134,7 +119,7 @@ export const Sidebar: React.FC = () => {
       </div>
 
       {/* Footer del Sidebar con botón de Cerrar Sesión */}
-      <div className="p-4 border-t border-[#1c1e26] space-y-2">
+      <div className="p-4 border-t border-[#1c1e26]">
         <button
           type="button"
           onClick={handleLogout}
@@ -143,9 +128,6 @@ export const Sidebar: React.FC = () => {
           <LogOut className="w-4 h-4 group-hover:text-red-400 transition-colors" />
           <span>Cerrar Sesión</span>
         </button>
-        <div className="text-[10px] text-gray-600 text-center">
-          Viral Studios v1.0 • Acceso Seguro
-        </div>
       </div>
     </div>
   );
