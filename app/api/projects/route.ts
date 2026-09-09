@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
     } = body;
 
     if (!supabaseServer) {
-      return NextResponse.json({ error: 'Supabase no inicializado' }, { status: 500 });
+      return NextResponse.json({ error: 'Base de datos no inicializada' }, { status: 500 });
     }
 
     // 1. Insertar proyecto

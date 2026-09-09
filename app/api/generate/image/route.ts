@@ -3,6 +3,46 @@ import { supabaseServer } from '@/lib/supabase/server';
 
 export const dynamic = 'force-dynamic';
 
+/**
+ * Sube un buffer de imagen al bucket viral-images de Supabase Storage
+ * y devuelve la URL pública permanente del CDN.
+ */
+async function uploadImageToStorage(
+  base64Data: string,
+  mimeType: string,
+  frameworkId: string,
+  callType: string,
+): Promise<string | null> {
+  try {
+    const buffer = Buffer.from(base64Data, 'base64');
+    const ext = mimeType.includes('png') ? 'png' : 'jpg';
+    const timestamp = Date.now();
+    const filePath = `${frameworkId}/${callType}_${timestamp}.${ext}`;
+
+    const { data, error } = await supabaseServer.storage
+      .from('viral-images')
+      .upload(filePath, buffer, {
+        contentType: mimeType,
+        upsert: false,
+      });
+
+    if (error) {
+      console.error('Error subiendo imagen a Storage:', error.message);
+      return null;
+    }
+
+    // Obtener la URL pública permanente del CDN
+    const { data: publicUrlData } = supabaseServer.storage
+      .from('viral-images')
+      .getPublicUrl(data.path);
+
+    return publicUrlData?.publicUrl || null;
+  } catch (err: any) {
+    console.error('Error en uploadImageToStorage:', err.message);
+    return null;
+  }
+}
+
 export async function POST(req: NextRequest) {
   const startTime = Date.now();
   try {
@@ -10,7 +50,7 @@ export async function POST(req: NextRequest) {
     const {
       prompt,
       frameworkId = 'super-alimentos',
-      model = 'gemini-3-pro-image', // Google Official: gemini-3-pro-image (Nano Banana Pro)
+      model = 'gemini-3-pro-image',
       aspectRatio = '9:16',
       projectId = null,
       callType = 'single_master_image',
@@ -28,7 +68,7 @@ export async function POST(req: NextRequest) {
       : '';
     const bananaKey = (process.env.NANO_BANANA_PRO_API_KEY && !process.env.NANO_BANANA_PRO_API_KEY.includes('tu_')) 
       ? process.env.NANO_BANANA_PRO_API_KEY 
-      : googleKey; // Fallback inteligente a la misma API Key de Google AI Studio
+      : googleKey;
 
     const hasRealKey = Boolean(bananaKey || googleKey);
 
@@ -46,7 +86,7 @@ export async function POST(req: NextRequest) {
     };
 
     if (hasRealKey) {
-      // 1. LLAMADA DIRECTA A GOOGLE AI STUDIO / VERTEX AI
+      // 1. LLAMADA DIRECTA A GOOGLE AI STUDIO
       if (googleKey) {
         try {
           const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image:generateContent?key=${googleKey}`, {
@@ -63,13 +103,21 @@ export async function POST(req: NextRequest) {
           const mimeType = rawResponse?.candidates?.[0]?.content?.parts?.[0]?.inlineData?.mimeType || 'image/jpeg';
           
           if (base64Data) {
-            generatedUrl = `data:${mimeType};base64,${base64Data}`;
-            apiStatus = 'SUCCESS';
+            // SUBIR A SUPABASE STORAGE en lugar de devolver Data URI base64
+            const storageUrl = await uploadImageToStorage(base64Data, mimeType, frameworkId, callType);
+            if (storageUrl) {
+              generatedUrl = storageUrl;
+              apiStatus = 'SUCCESS';
+            } else {
+              // Fallback: si storage falla, usar Data URI (no ideal pero funcional)
+              generatedUrl = `data:${mimeType};base64,${base64Data}`;
+              apiStatus = 'SUCCESS';
+            }
           } else {
             apiStatus = 'SUCCESS';
           }
         } catch (err: any) {
-          console.warn('Aviso al llamar a gemini-3-pro-image vía Google AI Studio:', err);
+          console.warn('Aviso al llamar al motor de imágenes 3D:', err);
         }
       }
 
@@ -102,14 +150,14 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      // 3. SI LA API RESPONDIO CON CUOTA LIMITADA (Google AI Studio Free Tier requiere facturación para imágenes)
+      // 3. SI LA API RESPONDIÓ CON CUOTA LIMITADA
       if (!generatedUrl) {
         const cleanPrompt = prompt.replace(/"/g, "'").slice(0, 100);
         const isQuota = rawResponse?.error?.code === 429 || rawResponse?.error?.status === 'RESOURCE_EXHAUSTED';
         const badgeColor = isQuota ? '#f59e0b' : '#38bdf8';
-        const badgeTitle = isQuota ? '⚠️ CUOTA EXCEDIDA (PLAN GRATUITO)' : '✨ GEMINI 3 PRO IMAGE';
+        const badgeTitle = isQuota ? '⚠️ CUOTA EXCEDIDA (PLAN GRATUITO)' : '✨ MOTOR DE IMAGEN 3D';
         const noteText = isQuota
-          ? 'Google AI Studio requiere vincular facturacion Pay-As-You-Go en Google Cloud para imagenes.'
+          ? 'Se requiere vincular facturacion Pay-As-You-Go para generar imagenes.'
           : 'Render estructurado validado.';
 
         const svgGraphic = `<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
@@ -128,8 +176,8 @@ export async function POST(req: NextRequest) {
           <rect width="1080" height="1920" fill="url(#bg)"/>
           <rect x="60" y="60" width="960" height="1800" rx="40" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="4"/>
           <circle cx="540" cy="650" r="200" fill="#1e2235" stroke="rgba(255,255,255,0.2)" stroke-width="3"/>
-          <text x="540" y="640" font-family="system-ui, sans-serif" font-size="64" text-anchor="middle" fill="#f8fafc">✨ 3D PIXAR</text>
-          <text x="540" y="710" font-family="system-ui, sans-serif" font-size="28" text-anchor="middle" fill="#94a3b8">GEMINI 3 PRO IMAGE</text>
+          <text x="540" y="640" font-family="system-ui, sans-serif" font-size="64" text-anchor="middle" fill="#f8fafc">✨ 3D HI-RES</text>
+          <text x="540" y="710" font-family="system-ui, sans-serif" font-size="28" text-anchor="middle" fill="#94a3b8">MOTOR DE IMAGEN IA</text>
           <rect x="100" y="960" width="880" height="360" rx="24" fill="#12141f" stroke="#2b3047" stroke-width="2"/>
           <text x="540" y="1030" font-family="system-ui, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="url(#neon)">FRAMEWORK: ${frameworkId.toUpperCase()}</text>
           <text x="540" y="1100" font-family="system-ui, sans-serif" font-size="24" text-anchor="middle" fill="#e2e8f0">${cleanPrompt}...</text>
@@ -141,8 +189,7 @@ export async function POST(req: NextRequest) {
         generatedUrl = `data:image/svg+xml;utf8,${encodeURIComponent(svgGraphic)}`;
       }
     } else {
-      // Si aún no se ingresa la API Key real, NO usamos fotos falsas de Unsplash.
-      // Generamos un render visual SVG estilizado 9:16 en alta resolución que refleja fielmente el prompt y estado.
+      // Si aún no se ingresa la API Key real, generar SVG placeholder
       apiStatus = 'AWAITING_KEY';
       const cleanPrompt = prompt.replace(/"/g, "'").slice(0, 120);
       const svgGraphic = `<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
@@ -161,25 +208,25 @@ export async function POST(req: NextRequest) {
         <rect width="1080" height="1920" fill="url(#bg)"/>
         <rect x="60" y="60" width="960" height="1800" rx="40" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="4"/>
         <circle cx="540" cy="700" r="220" fill="#1e2235" stroke="rgba(255,255,255,0.2)" stroke-width="3"/>
-        <text x="540" y="690" font-family="system-ui, sans-serif" font-size="72" text-anchor="middle" fill="#f8fafc">✨ 3D PIXAR</text>
-        <text x="540" y="760" font-family="system-ui, sans-serif" font-size="32" text-anchor="middle" fill="#94a3b8">NANO BANANA PRO</text>
+        <text x="540" y="690" font-family="system-ui, sans-serif" font-size="72" text-anchor="middle" fill="#f8fafc">✨ 3D HI-RES</text>
+        <text x="540" y="760" font-family="system-ui, sans-serif" font-size="32" text-anchor="middle" fill="#94a3b8">MOTOR DE IMAGEN IA</text>
         <rect x="120" y="1040" width="840" height="280" rx="24" fill="#12141f" stroke="#2b3047" stroke-width="2"/>
         <text x="540" y="1120" font-family="system-ui, sans-serif" font-size="32" font-weight="bold" text-anchor="middle" fill="url(#silver)">FRAMEWORK: ${frameworkId.toUpperCase()}</text>
         <text x="540" y="1190" font-family="system-ui, sans-serif" font-size="26" text-anchor="middle" fill="#e2e8f0">${cleanPrompt}...</text>
         <rect x="240" y="1460" width="600" height="90" rx="45" fill="#f59e0b" fill-opacity="0.15" stroke="#f59e0b" stroke-width="2"/>
-        <text x="540" y="1516" font-family="system-ui, sans-serif" font-size="28" font-weight="bold" text-anchor="middle" fill="#fbbf24">⏳ LISTO PARA API KEY (NANO BANANA PRO)</text>
+        <text x="540" y="1516" font-family="system-ui, sans-serif" font-size="28" font-weight="bold" text-anchor="middle" fill="#fbbf24">⏳ CONFIGURA TU API KEY</text>
       </svg>`;
 
       generatedUrl = `data:image/svg+xml;utf8,${encodeURIComponent(svgGraphic)}`;
       rawResponse = {
-        notice: 'Estructura lista para API Key real de Nano Banana Pro en .env.local',
+        notice: 'Estructura lista para configurar API Key en .env.local',
         configuredKey: false,
       };
     }
 
     const latencyMs = Date.now() - startTime;
 
-    // REGISTRO DE TRAZABILIDAD REAL EN SUPABASE
+    // REGISTRO DE TRAZABILIDAD EN BASE DE DATOS
     try {
       if (supabaseServer) {
         await supabaseServer.from('viral_generation_logs').insert({
@@ -192,13 +239,14 @@ export async function POST(req: NextRequest) {
             ...rawResponse,
             hasRealKey,
             generatedUrlLength: generatedUrl.length,
+            storedInBucket: generatedUrl.startsWith('https://'),
           },
           latency_ms: latencyMs,
           status: apiStatus === 'ERROR' ? 'ERROR' : 'SUCCESS',
         });
       }
     } catch (logErr) {
-      console.warn('Aviso: no se pudo persistir el log en Supabase:', logErr);
+      console.warn('Aviso: no se pudo persistir el log:', logErr);
     }
 
     return NextResponse.json({
