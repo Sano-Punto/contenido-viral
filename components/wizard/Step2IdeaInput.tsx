@@ -75,7 +75,7 @@ export const Step2IdeaInput: React.FC = () => {
       true,
       requiresScript
         ? 'Estructurando guion de alta retención y viaje biológico...'
-        : 'Generando conceptos visuales Pixar 3D y reacciones de órganos por escena...'
+        : 'Generando conceptos visuales 3D y reacciones de órganos por escena...'
     );
 
     try {

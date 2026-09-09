@@ -25,13 +25,13 @@ export const LogsView: React.FC = () => {
                 latencyMs: dbLog.latency_ms,
                 requestPayload: dbLog.request_payload,
                 responsePayload: dbLog.response_payload,
-                message: `Persistido en Supabase (${dbLog.created_at})`,
+                message: `Persistido en registro cloud (${dbLog.created_at})`,
               });
             });
           }
         }
       } catch (err) {
-        console.warn('No se pudieron cargar logs de Supabase:', err);
+        console.warn('No se pudieron cargar logs:', err);
       } finally {
         setHasLoadedDbLogs(true);
       }
@@ -94,7 +94,7 @@ export const LogsView: React.FC = () => {
           <span className="text-slate-500 uppercase text-[10px]">Models Active</span>
           <div className="flex items-center gap-1.5 text-slate-200">
             <Server className="w-3.5 h-3.5 text-purple-400" />
-            <span className="font-semibold truncate">Banana/Google</span>
+            <span className="font-semibold truncate">IA Pipeline Pro</span>
           </div>
         </div>
       </div>

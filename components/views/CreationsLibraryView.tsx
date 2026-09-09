@@ -127,7 +127,7 @@ export const CreationsLibraryView: React.FC = () => {
       {isLoading ? (
         <div className="bg-white border border-slate-200 rounded-2xl p-12 text-center space-y-4 shadow-sm">
           <div className="w-10 h-10 border-4 border-slate-200 border-t-slate-900 rounded-full animate-spin mx-auto" />
-          <p className="text-xs text-slate-500 font-medium">Cargando creaciones guardadas en Supabase...</p>
+          <p className="text-xs text-slate-500 font-medium">Cargando creaciones guardadas en la biblioteca...</p>
         </div>
       ) : projects.length === 0 ? (
         <div className="bg-white border border-slate-200 rounded-2xl p-12 text-center space-y-3 shadow-sm max-w-lg mx-auto">

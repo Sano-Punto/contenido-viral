@@ -52,58 +52,58 @@ export const AiSettingsView: React.FC = () => {
         </div>
 
         <form onSubmit={handleSave} className="space-y-4">
-          {/* 1. Nano Banana Pro (Imágenes 3D Pixar) */}
+          {/* 1. Motor de Imagen 3D */}
           <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-xs font-semibold text-gray-800 flex items-center gap-2">
                 <ImageIcon className="w-3.5 h-3.5 text-slate-700" />
-                <span>Nano Banana Pro · <code className="text-[11px] font-mono bg-white px-1.5 py-0.5 rounded border">gemini-3-pro-image</code></span>
+                <span>Motor de Imagen 3D · <code className="text-[11px] font-mono bg-white px-1.5 py-0.5 rounded border">image-3d-high-res</code></span>
               </label>
               <span className="text-[10px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
                 Modelo Oficial · Imágenes 3D
               </span>
             </div>
             <p className="text-[11px] text-gray-500">
-              Utilizado para crear la imagen maestra del órgano tierno en UE5 / 8K / Subsurface scattering (1 llamada API propagada en cascada).
+              Utilizado para crear la imagen maestra del elemento biológico / alimento en ultra alta resolución (1 llamada API propagada en cascada).
             </p>
             <input
               type="password"
-              placeholder="banana_api_key_..."
+              placeholder="api_key_..."
               value={keys.nanoBananaKey}
               onChange={(e) => setKeys({ ...keys, nanoBananaKey: e.target.value })}
               className="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:border-slate-500"
             />
           </div>
 
-          {/* 2. Google Veo 3.1 / Omni Flash (Video Neural & Animación) */}
+          {/* 2. Motor de Video & Animación */}
           <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-xs font-semibold text-gray-800 flex items-center gap-2">
                 <Video className="w-3.5 h-3.5 text-slate-700" />
-                <span>Google Omni Flash · <code className="text-[11px] font-mono bg-white px-1.5 py-0.5 rounded border">gemini-omni-flash-preview</code></span>
+                <span>Motor de Generación de Video · <code className="text-[11px] font-mono bg-white px-1.5 py-0.5 rounded border">video-render-engine</code></span>
               </label>
               <span className="text-[10px] font-semibold text-blue-800 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
                 Modelo Oficial · Video 9:16
               </span>
             </div>
             <p className="text-[11px] text-gray-500">
-              Anima la imagen maestra escena por escena según las instrucciones de control (masticar, brillar, inflarse de grasa, zoom boca/esófago).
+              Anima la imagen maestra escena por escena según las instrucciones de control visual y efectos.
             </p>
             <input
               type="password"
-              placeholder="AIzaSy..."
+              placeholder="api_key_..."
               value={keys.googleVertexKey}
               onChange={(e) => setKeys({ ...keys, googleVertexKey: e.target.value })}
               className="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:border-slate-500"
             />
           </div>
 
-          {/* 3. Supabase Database & Logs */}
+          {/* 3. Base de Datos Cloud */}
           <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-xs font-semibold text-gray-800 flex items-center gap-2">
                 <Database className="w-3.5 h-3.5 text-slate-700" />
-                <span>Supabase Database (Servicio Cloud Conectado)</span>
+                <span>Base de Datos y Almacenamiento Cloud</span>
               </label>
               <span className="text-[10px] font-semibold text-purple-800 bg-purple-50 px-2 py-0.5 rounded border border-purple-200">
                 Conectado & Migrado
@@ -111,7 +111,7 @@ export const AiSettingsView: React.FC = () => {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
               <div>
-                <span className="text-[10px] font-medium text-gray-500 block mb-1">Project URL</span>
+                <span className="text-[10px] font-medium text-gray-500 block mb-1">URL de servicio</span>
                 <input
                   type="text"
                   readOnly
@@ -122,26 +122,26 @@ export const AiSettingsView: React.FC = () => {
               <div>
                 <span className="text-[10px] font-medium text-gray-500 block mb-1">Status Tablas</span>
                 <div className="w-full bg-emerald-50 border border-emerald-200 rounded-lg p-2 text-xs text-emerald-800 font-semibold">
-                  ✓ 4 tablas activas (viral_projects, viral_scenes, etc.)
+                  ✓ Tablas activas (proyectos, escenas, logs)
                 </div>
               </div>
             </div>
           </div>
 
-          {/* 4. ElevenLabs Voiceover (Opcional para Viaje Interno) */}
+          {/* 4. Sintetizador de Voz en Off */}
           <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-xs font-semibold text-gray-800 flex items-center gap-2">
                 <Volume2 className="w-3.5 h-3.5 text-slate-700" />
-                <span>ElevenLabs (Voz en off para Qué Sucede al Comer)</span>
+                <span>Motor de Locución (Sintetizador de Voz)</span>
               </label>
               <span className="text-[10px] font-medium text-gray-600 bg-white px-2 py-0.5 rounded border border-slate-200">
-                Voz oficial: l1zE9xgNpUTaQCZzpNJa
+                Voz oficial configurada
               </span>
             </div>
             <input
               type="password"
-              placeholder="xi-api-key-..."
+              placeholder="api_key_..."
               value={keys.elevenLabsKey}
               onChange={(e) => setKeys({ ...keys, elevenLabsKey: e.target.value })}
               className="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:border-slate-500"

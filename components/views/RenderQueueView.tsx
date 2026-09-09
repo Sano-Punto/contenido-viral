@@ -116,7 +116,7 @@ export const RenderQueueView: React.FC = () => {
         {isLoading ? (
           <div className="py-12 text-center text-slate-400 flex flex-col items-center justify-center gap-2">
             <RefreshCw className="w-5 h-5 animate-spin text-slate-600" />
-            <span className="text-xs">Consultando Supabase...</span>
+            <span className="text-xs">Consultando cola de procesamiento...</span>
           </div>
         ) : activeProjects.length === 0 ? (
           <div className="py-12 text-center text-slate-400 space-y-2">

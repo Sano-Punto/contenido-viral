@@ -15,7 +15,7 @@ export const MediaLibraryView: React.FC = () => {
       id: s.id || `media-${idx}`,
       title: s.title || `Escena ${idx + 1}`,
       url: s.mediaUrl,
-      tag: s.subjectOrItem || '3D Pixar Clip',
+      tag: s.subjectOrItem || 'Clip 3D',
     }));
 
   return (
@@ -28,7 +28,7 @@ export const MediaLibraryView: React.FC = () => {
             <span>Biblioteca de medios del proyecto</span>
           </h3>
           <p className="text-xs text-slate-500">
-            Recursos visuales 9:16 generados con Nano Banana Pro y pistas de audio licenciadas.
+            Recursos visuales 9:16 generados con IA de alta precisión y pistas de audio licenciadas.
           </p>
         </div>
 
@@ -77,7 +77,7 @@ export const MediaLibraryView: React.FC = () => {
               <ImageIcon className="w-6 h-6 text-slate-300 mx-auto" />
               <div className="text-xs font-semibold text-slate-600">No hay visuales generados en esta sesión</div>
               <p className="text-[11px] text-slate-400">
-                Cuando generes escenas con Nano Banana Pro en el Generador, aparecerán catalogadas aquí en tiempo real.
+                Cuando generes escenas en el Generador, aparecerán catalogadas aquí en tiempo real.
               </p>
             </div>
           ) : (
