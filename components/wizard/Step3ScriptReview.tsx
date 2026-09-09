@@ -26,10 +26,7 @@ export const Step3ScriptReview: React.FC = () => {
       {/* Header */}
       <div className="text-center space-y-1.5">
         <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-          Revisa y ajusta el{' '}
-          <span className="font-serif italic font-bold text-silver-shine">
-            guion por escenas
-          </span>
+          Revisa y ajusta el guion por escenas
         </h2>
         <p className="text-xs sm:text-sm text-slate-500">
           Edita el texto de cada escena. Las marcas de tiempo de los subtítulos se recalcularán automáticamente.

@@ -144,10 +144,7 @@ export const Step5VideoReady: React.FC = () => {
 
             <div className="space-y-1">
               <h3 className="text-lg font-bold text-gray-900">
-                Generando video con{' '}
-                <span className="font-serif italic font-semibold text-silver-shine">
-                  IA Cinemática
-                </span>
+                Generando video con IA Cinemática
               </h3>
               <p className="text-xs text-gray-500">
                 Procesando escena {currentSceneProcessing} de {scenes.length} (renderizando animación 3D y movimiento de cámara)...
@@ -206,8 +203,7 @@ export const Step5VideoReady: React.FC = () => {
               </div>
               <div>
                 <h2 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-                  <span>¡Tu video está</span>
-                  <span className="font-serif italic font-semibold text-silver-shine">generado y listo</span>!
+                  ¡Tu video está generado y listo!
                 </h2>
                 <p className="text-xs text-slate-500">
                   {scenes.length} escenas integradas con transiciones en formato 9:16 vertical ({totalDurationSec} segundos).

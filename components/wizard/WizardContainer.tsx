@@ -87,8 +87,7 @@ export const WizardContainer: React.FC = () => {
 
             <div className="space-y-1.5">
               <h3 className="text-lg font-bold text-white tracking-tight flex items-center justify-center gap-1.5">
-                <span>Generando con</span>
-                <span className="font-serif italic font-semibold text-silver-shine">IA</span>
+                Generando con IA
               </h3>
               <p className="text-xs text-slate-300 leading-relaxed max-w-xs mx-auto">
                 {generatingStep || 'Diseñando conceptos visuales y generando imagen maestra...'}

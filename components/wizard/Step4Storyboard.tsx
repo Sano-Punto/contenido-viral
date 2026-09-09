@@ -49,9 +49,7 @@ export const Step4Storyboard: React.FC = () => {
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
         <div>
           <h2 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2">
-            <span>Storyboard</span>
-            <span className="font-serif italic font-bold text-silver-shine">visual</span>
-            <span>& escenas ({project.scenes.length})</span>
+            <span>Storyboard visual & escenas ({project.scenes.length})</span>
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">
             Revisa los visuales generados para cada escena. Puedes regenerar las imágenes tantas veces como quieras antes de procesar el video.

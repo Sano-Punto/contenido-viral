@@ -13,11 +13,8 @@ export const Step1FrameworkSelector: React.FC = () => {
   return (
     <div className="space-y-6 w-full">
       <div className="space-y-1 max-w-xl">
-        <h2 className="text-xl sm:text-2xl font-bold text-[#14141e] tracking-tight">
-          Selecciona el{' '}
-          <span className="font-serif italic font-semibold text-silver-shine">
-            formato
-          </span>
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
+          Selecciona el formato
         </h2>
         <p className="text-xs text-gray-500">
           Elige el concepto base para tu video.

@@ -98,10 +98,7 @@ export const Step2IdeaInput: React.FC = () => {
           <strong className="text-slate-950 font-bold">{selectedFw.name}</strong>
         </div>
         <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-          Define la{' '}
-          <span className="font-serif italic font-bold text-silver-shine">
-            idea de tu video
-          </span>
+          Define la idea de tu video
         </h2>
         <p className="text-xs sm:text-sm text-slate-500">
           Indica el tema central. La IA estructurará los conceptos en la cantidad exacta de escenas que elijas.
