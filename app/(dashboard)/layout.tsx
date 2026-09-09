@@ -18,7 +18,7 @@ export default function DashboardLayout({
       <Sidebar />
       <ContentWrapper>
         <TopHeader />
-        <main className="flex-1 px-4 sm:px-6 py-5 w-full">
+        <main className="flex-1 px-4 sm:px-6 py-8 sm:py-10 w-full">
           <div className="max-w-6xl mx-auto w-full">
             {children}
           </div>

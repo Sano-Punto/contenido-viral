@@ -3,7 +3,7 @@
 import React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useSystemStore } from '@/store/useProjectStore';
-import { Plus, Film, Menu, Sparkles } from 'lucide-react';
+import { Plus, Film, Menu } from 'lucide-react';
 
 const PATH_TITLES: Record<string, { titleMain: string; titleAccent: string }> = {
   '/generador-de-videos': { titleMain: 'Generador de', titleAccent: 'Videos' },
@@ -22,10 +22,10 @@ export const TopHeader: React.FC = () => {
   const info = PATH_TITLES[pathname] || { titleMain: 'Viral Studios', titleAccent: 'Plataforma' };
 
   return (
-    <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-slate-200/80 px-4 sm:px-8 py-4 sm:py-5 shadow-xs transition-all">
+    <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-slate-200/80 px-4 sm:px-8 py-6 sm:py-8 shadow-xs transition-all">
       <div className="flex items-center justify-between relative w-full">
-        {/* Columna Izquierda: Botón Hamburguesa en Móvil / Indicador en Desktop */}
-        <div className="flex items-center gap-3 min-w-[40px]">
+        {/* Columna Izquierda: Botón Hamburguesa en Móvil */}
+        <div className="flex items-center min-w-[40px]">
           <button
             type="button"
             onClick={toggleMobileMenu}
@@ -34,16 +34,11 @@ export const TopHeader: React.FC = () => {
           >
             <Menu className="w-5 h-5" />
           </button>
-
-          <div className="hidden md:flex items-center gap-2 text-xs font-semibold text-slate-400">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="tracking-wide uppercase text-[10px] text-slate-400 font-bold">Studio Active</span>
-          </div>
         </div>
 
-        {/* Columna Central: Título Centrado y Destacado */}
+        {/* Columna Central: Título Centrado y Destacado con amplio espacio superior */}
         <div className="flex-1 text-center px-2">
-          <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center justify-center gap-2">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight flex items-center justify-center gap-2">
             <span>{info.titleMain}</span>
             <span className="font-serif italic font-extrabold text-silver-shine drop-shadow-sm">
               {info.titleAccent}
