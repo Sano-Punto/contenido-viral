@@ -22,13 +22,13 @@ export const WizardContainer: React.FC = () => {
         { internalStep: 2, displayNum: 2, title: 'Idea' },
         { internalStep: 3, displayNum: 3, title: 'Guion' },
         { internalStep: 4, displayNum: 4, title: 'Storyboard' },
-        { internalStep: 5, displayNum: 5, title: 'Generación' },
+        { internalStep: 5, displayNum: 5, title: 'Video' },
       ]
     : [
         { internalStep: 1, displayNum: 1, title: 'Formato' },
-        { internalStep: 2, displayNum: 2, title: 'Idea & escenas' },
+        { internalStep: 2, displayNum: 2, title: 'Idea' },
         { internalStep: 4, displayNum: 3, title: 'Storyboard' },
-        { internalStep: 5, displayNum: 4, title: 'Generación' },
+        { internalStep: 5, displayNum: 4, title: 'Video' },
       ];
 
   const currentDisplayStep = stepsConfig.find((s) => s.internalStep === currentStep) || stepsConfig[0];

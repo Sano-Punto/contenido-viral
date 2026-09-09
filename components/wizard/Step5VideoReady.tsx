@@ -157,9 +157,9 @@ export const Step5VideoReady: React.FC = () => {
                 <span>Composición vertical 9:16 & animación</span>
                 <span>{processingProgress}%</span>
               </div>
-              <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+              <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200 shadow-inner">
                 <div
-                  className="h-full bg-gradient-to-r from-slate-700 to-slate-950 rounded-full transition-all duration-500"
+                  className="h-full btn-silver-luxury rounded-full transition-all duration-500 shadow-sm"
                   style={{ width: `${processingProgress}%` }}
                 />
               </div>
