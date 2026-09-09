@@ -9,6 +9,7 @@ const PATH_TITLES: Record<string, { titleMain: string; titleAccent: string }> = 
   '/generador-de-videos': { titleMain: 'Generador de', titleAccent: 'Videos' },
   '/': { titleMain: 'Generador de', titleAccent: 'Videos' },
   '/estudio-remotion': { titleMain: 'Estudio', titleAccent: 'Remotion' },
+  '/biblioteca-creaciones': { titleMain: 'Biblioteca de', titleAccent: 'Creaciones' },
   '/formatos-frameworks': { titleMain: 'Formatos &', titleAccent: 'Frameworks' },
   '/biblioteca-medios': { titleMain: 'Biblioteca de', titleAccent: 'Medios' },
   '/cola-renders': { titleMain: 'Cola de', titleAccent: 'Renders' },

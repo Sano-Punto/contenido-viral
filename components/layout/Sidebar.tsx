@@ -25,6 +25,7 @@ interface MenuItem {
 const MENU_ITEMS: MenuItem[] = [
   { href: '/generador-de-videos', label: 'Generador de videos', icon: Wand2 },
   { href: '/estudio-remotion', label: 'Estudio Remotion', icon: Film },
+  { href: '/biblioteca-creaciones', label: 'Biblioteca de creaciones', icon: Film },
   { href: '/formatos-frameworks', label: 'Formatos & frameworks', icon: Layers },
   { href: '/biblioteca-medios', label: 'Biblioteca de medios', icon: FolderOpen },
   { href: '/cola-renders', label: 'Cola de renders', icon: ListOrdered },

@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
       scenesCount,
       masterImageUrl,
       masterImagePrompt,
+      caption,
       status = 'storyboarding',
       scenes = [],
     } = body;
@@ -53,6 +54,7 @@ export async function POST(req: NextRequest) {
         scenes_count: scenesCount || scenes.length,
         master_image_url: masterImageUrl,
         master_image_prompt: masterImagePrompt,
+        caption,
         status,
       })
       .select()

@@ -78,6 +78,7 @@ export const Step5VideoReady: React.FC = () => {
               ideaPrompt: project.ideaPrompt,
               scenesCount: scenes.length,
               masterImageUrl: scenes[0]?.mediaUrl,
+              caption: project.caption,
               status: 'ready',
               scenes,
             }),
@@ -102,19 +103,21 @@ export const Step5VideoReady: React.FC = () => {
     return () => {
       isCancelled = true;
     };
-  }, [isProcessing, scenes, project.frameworkId, project.ideaPrompt, project.title]);
+  }, [isProcessing, scenes, project.frameworkId, project.ideaPrompt, project.title, project.caption]);
 
   const handleDownload = () => {
     setIsDownloading(true);
-    // Disparar descarga directa del archivo o render Remotion
     try {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(project, null, 2));
-      const downloadAnchor = document.createElement('a');
-      downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", `viral-studios-${project.frameworkId || 'video'}.json`);
-      document.body.appendChild(downloadAnchor);
-      downloadAnchor.click();
-      downloadAnchor.remove();
+      const mediaUrl = scenes.find((s) => s.mediaUrl)?.mediaUrl || scenes[0]?.mediaUrl;
+      if (mediaUrl) {
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", mediaUrl);
+        downloadAnchor.setAttribute("download", `video-viral-${project.frameworkId || 'escenas'}.mp4`);
+        downloadAnchor.setAttribute("target", "_blank");
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+      }
 
       setIsDownloading(false);
       setDownloadSuccess(true);
@@ -257,9 +260,6 @@ export const Step5VideoReady: React.FC = () => {
             <div className="md:col-span-7 bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
               <div>
                 <h3 className="text-base font-bold text-slate-900">¿Qué deseas hacer con tu video?</h3>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Proyecto sincronizado con Supabase. Puedes exportar el paquete de producción o abrir el Estudio Remotion.
-                </p>
               </div>
 
               {/* Opción 1: Descargar Directamente */}
