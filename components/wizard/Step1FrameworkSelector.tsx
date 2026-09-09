@@ -1,9 +1,9 @@
 import React from 'react';
 import { useSystemStore } from '@/store/useProjectStore';
-import { CheckCircle2, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 export const Step1FrameworkSelector: React.FC = () => {
-  const { project, frameworks, selectFramework, setStep } = useSystemStore();
+  const { frameworks, selectFramework, setStep } = useSystemStore();
 
   const handleSelectAndProceed = (frameworkId: string) => {
     selectFramework(frameworkId);
@@ -21,43 +21,31 @@ export const Step1FrameworkSelector: React.FC = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
-        {frameworks.map((fw) => {
-          const isSelected = project.frameworkId === fw.id;
-
-          return (
-            <button
-              key={fw.id}
-              type="button"
-              onClick={() => handleSelectAndProceed(fw.id)}
-              className={`text-left rounded-xl p-4 border transition-all ${
-                isSelected
-                  ? 'silver-selected'
-                  : 'bg-white border-slate-200 hover:border-slate-400'
-              }`}
-            >
-              <div className="flex items-start justify-between gap-2 mb-2">
-                <h3 className="font-bold text-gray-900 text-sm leading-tight">
-                  {fw.name}
-                </h3>
-                {isSelected && (
-                  <CheckCircle2 className="w-4 h-4 text-slate-800 shrink-0" />
-                )}
-              </div>
-
-              <p className="text-[11px] text-gray-600 leading-relaxed mb-3">
-                {fw.niche} · {fw.targetAudience}
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+        {frameworks.map((fw) => (
+          <button
+            key={fw.id}
+            type="button"
+            onClick={() => handleSelectAndProceed(fw.id)}
+            className="text-left bg-white border border-slate-200 hover:border-slate-400 hover:shadow-sm rounded-xl p-5 transition-all flex flex-col justify-between group cursor-pointer space-y-4"
+          >
+            <div className="space-y-2">
+              <h3 className="font-bold text-gray-900 text-sm leading-snug group-hover:text-slate-800 transition-colors">
+                {fw.name}
+              </h3>
+              <p className="text-xs text-slate-500 leading-relaxed font-normal">
+                {fw.description}
               </p>
+            </div>
 
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-semibold text-slate-500">
-                  {fw.category}
-                </span>
-                <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
-              </div>
-            </button>
-          );
-        })}
+            <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+              <span className="text-[11px] font-semibold text-slate-400 group-hover:text-slate-600 transition-colors">
+                {fw.category}
+              </span>
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-slate-700 group-hover:translate-x-0.5 transition-all" />
+            </div>
+          </button>
+        ))}
       </div>
     </div>
   );
