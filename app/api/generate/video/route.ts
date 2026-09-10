@@ -15,7 +15,6 @@ async function uploadVideoToStorage(
   googleKey: string,
 ): Promise<string | null> {
   try {
-    // Descargar el video desde la URL temporal de Google
     const fetchUrl = videoSourceUrl.includes('key=') 
       ? videoSourceUrl 
       : (videoSourceUrl + '&key=' + googleKey);
@@ -56,6 +55,39 @@ async function uploadVideoToStorage(
   }
 }
 
+/**
+ * Convierte una URL de imagen (CDN, externa o data URI) a Buffer Base64
+ * para pasarla como fotograma inicial a la API de video de Veo 3.1
+ */
+async function fetchImageAsBase64(imageUrl?: string): Promise<{ base64: string; mimeType: string } | null> {
+  if (!imageUrl) return null;
+
+  try {
+    if (imageUrl.startsWith('data:')) {
+      const parts = imageUrl.split(',');
+      const mimeMatch = parts[0].match(/:(.*?);/);
+      const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+      const base64 = parts[1];
+      return { base64, mimeType };
+    }
+
+    if (imageUrl.startsWith('http')) {
+      const res = await fetch(imageUrl);
+      if (res.ok) {
+        const buffer = Buffer.from(await res.arrayBuffer());
+        const mimeType = res.headers.get('content-type') || 'image/jpeg';
+        return {
+          base64: buffer.toString('base64'),
+          mimeType,
+        };
+      }
+    }
+  } catch (err) {
+    console.warn('No se pudo convertir imagen a base64 para Veo:', err);
+  }
+  return null;
+}
+
 export async function POST(req: NextRequest) {
   const startTime = Date.now();
   try {
@@ -73,7 +105,7 @@ export async function POST(req: NextRequest) {
       masterImageUrl,
       durationSec = 8,
       frameworkId = 'super-alimentos',
-      model = 'gemini-omni-flash-preview',
+      model = 'veo-3.1-fast-generate-preview',
       projectId = null,
     } = body;
 
@@ -85,8 +117,10 @@ export async function POST(req: NextRequest) {
     let rawResponse: any = {};
     let storedInBucket = false;
 
-    // Prompt de video optimizado
-    const veoPrompt = `${visualPrompt || 'Cute 3D character inside soft anatomical biological cavity'}. ${videoControlPrompt || 'Hand enters slowly feeding the character. Character chews happily and glows with vibrant energy'}. Camera: ${cameraMovement || 'Smooth cinematic push-in'}. 8k, Unreal Engine 5 render, cinematic lighting. No text.`;
+    // Construcción del Prompt Cinemático y Preciso para Veo 3.1
+    const cleanCamera = cameraMovement || (sceneOrder === 0 ? 'Fast zoom push-in' : 'Smooth cinematic macro push-in');
+    const cleanControl = videoControlPrompt || conceptVisual || 'Hand enters holding fresh item feeding the character. Character chews and smiles happily.';
+    const veoPrompt = `${cleanControl}. Camera movement: ${cleanCamera}. Character anatomical structure and soft biological cavity environment remain stable, Unreal Engine 5 Disney 3D style, 8k cinematic lighting, volumetric soft bokeh. Strictly no text, no letters, no words, no UI, no voices.`;
 
     const requestPayload = {
       model: 'veo-3.1-fast-generate-preview',
@@ -96,18 +130,36 @@ export async function POST(req: NextRequest) {
       scene_title: sceneTitle,
       duration_sec: durationSec,
       veo_prompt: veoPrompt,
+      has_image_conditioning: Boolean(masterImageUrl),
       timestamp: new Date().toISOString(),
     };
 
     if (hasRealKey) {
       try {
-        // 1. Iniciar generación con Veo 3.1 Fast
+        // 1. Obtener la imagen maestra como fotograma obligatorio inicial (Image-to-Video)
+        const imageConditioning = await fetchImageAsBase64(masterImageUrl);
+
+        const instancePayload: any = {
+          prompt: veoPrompt,
+        };
+
+        if (imageConditioning?.base64) {
+          instancePayload.image = {
+            bytesBase64Encoded: imageConditioning.base64,
+          };
+        }
+
+        // 2. Iniciar generación con Veo 3.1 Fast (Image-to-Video)
         const initiateRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/veo-3.1-fast-generate-preview:predictLongRunning?key=${googleKey}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            instances: [{ prompt: veoPrompt }],
-            parameters: { aspectRatio: '9:16' },
+            instances: [instancePayload],
+            parameters: {
+              aspectRatio: '9:16',
+              durationSeconds: Math.min(Math.max(durationSec, 5), 8),
+              sampleCount: 1,
+            },
           }),
         });
 
@@ -116,12 +168,12 @@ export async function POST(req: NextRequest) {
 
         if (initiateRes.ok && initiateData.name) {
           const operationName = initiateData.name;
-          // 2. Polling de la operación hasta 35 segundos
-          const maxPolls = 10;
+          // 3. Polling de la operación hasta 45 segundos
+          const maxPolls = 12;
           let isComplete = false;
 
           for (let pollIdx = 0; pollIdx < maxPolls; pollIdx++) {
-            await new Promise((r) => setTimeout(r, 3000));
+            await new Promise((r) => setTimeout(r, 3500));
             const pollRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/${operationName}?key=${googleKey}`);
             const pollData = await pollRes.json();
 
@@ -130,13 +182,12 @@ export async function POST(req: NextRequest) {
               rawResponse = pollData;
               const downloadUri = pollData?.response?.generateVideoResponse?.generatedSamples?.[0]?.video?.uri;
               if (downloadUri) {
-                // SUBIR VIDEO A SUPABASE STORAGE en lugar de devolver proxy temporal
+                // SUBIR VIDEO DIRECTAMENTE A SUPABASE STORAGE BUCKET
                 const storageUrl = await uploadVideoToStorage(downloadUri, frameworkId, sceneOrder, googleKey);
                 if (storageUrl) {
                   videoUrl = storageUrl;
                   storedInBucket = true;
                 } else {
-                  // Fallback al proxy si storage falla
                   videoUrl = `/api/video-proxy?uri=${encodeURIComponent(downloadUri)}`;
                 }
                 apiStatus = 'SUCCESS';
@@ -146,15 +197,17 @@ export async function POST(req: NextRequest) {
           }
 
           if (!isComplete && !videoUrl) {
+            // Si el renderizado toma más tiempo, fallback seguro a la imagen maestra
             videoUrl = masterImageUrl || '';
             apiStatus = 'SUCCESS';
           }
         } else {
+          // Si hubo error en initiate, fallback a la imagen maestra
           videoUrl = masterImageUrl || '';
           apiStatus = 'SUCCESS';
         }
       } catch (err: any) {
-        console.error('Error llamando al motor de video:', err);
+        console.error('Error llamando al motor de video Veo 3.1:', err);
         videoUrl = masterImageUrl || '';
         apiStatus = 'ERROR';
         rawResponse = { error: err.message };
@@ -163,7 +216,7 @@ export async function POST(req: NextRequest) {
       apiStatus = 'AWAITING_KEY';
       videoUrl = masterImageUrl;
       rawResponse = {
-        notice: 'Estructura lista para configurar API Key de video en .env.local',
+        notice: 'Estructura lista para configurar API Key en .env.local',
         configuredKey: false,
       };
     }
@@ -176,7 +229,7 @@ export async function POST(req: NextRequest) {
         await supabaseServer.from('viral_generation_logs').insert({
           project_id: projectId,
           framework_id: frameworkId,
-          model_name: model,
+          model_name: 'veo-3.1-fast-generate-preview',
           call_type: `scene_${sceneOrder}_video_render`,
           request_payload: requestPayload,
           response_payload: {
@@ -196,7 +249,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       success: apiStatus !== 'ERROR',
       videoUrl,
-      model,
+      model: 'veo-3.1-fast-generate-preview',
       frameworkId,
       sceneOrder,
       isRealKeyConfigured: hasRealKey,

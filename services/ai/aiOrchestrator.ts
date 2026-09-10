@@ -9,18 +9,17 @@ interface MasterImageResponse {
 
 /**
  * Orquestador de IA para generación de imágenes maestras y video escena por escena.
- * Aplica la regla Single Master Image (1 llamada a Nano Banana Pro para formatos de órganos)
- * y llamadas por escena para video con Google Omni Flash.
- * Registra trazabilidad en memoria y en la base de datos Supabase.
+ * Aplica la regla Single Master Image (1 llamada para formatos de órganos)
+ * y llamadas progresivas por escena para video animado con Veo 3.1.
+ * Registra trazabilidad en memoria y en la base de datos.
  */
 export async function generateMasterImage(
   framework: ViralFramework,
   ideaPrompt: string
 ): Promise<MasterImageResponse> {
   const isSingleMaster = framework.id === 'super-alimentos' || framework.id === 'alimentos-que-retan';
-  const modelName = 'gemini-3-pro-image'; // Official Google AI: gemini-3-pro-image (Nano Banana Pro)
+  const modelName = 'gemini-3.1-flash-image';
   
-  // Usar el visualPrompt enriquecido y dinámico generado para el órgano específico
   const characterSubject = ideaPrompt;
 
   const promptPayload = {
@@ -37,7 +36,7 @@ export async function generateMasterImage(
     modelName: modelName,
     callType: isSingleMaster ? 'single_master_image' : 'scene_video_render',
     status: 'PENDING',
-    message: `Iniciando llamada real a ${modelName}...`,
+    message: `Iniciando generación de imagen maestra 3D con ${modelName}...`,
     requestPayload: promptPayload,
   });
 
@@ -69,8 +68,8 @@ export async function generateMasterImage(
       callType: isSingleMaster ? 'single_master_image' : 'scene_video_render',
       status: 'SUCCESS',
       message: data.isRealKeyConfigured
-        ? `Imagen generada exitosamente con Nano Banana Pro en ${latencyMs}ms`
-        : `Estructura lista (esperando API key en .env.local). Payload validado en ${latencyMs}ms`,
+        ? `Imagen generada exitosamente en ${latencyMs}ms`
+        : `Estructura validada en ${latencyMs}ms`,
       requestPayload: promptPayload,
       responsePayload: data,
       latencyMs,
@@ -97,14 +96,14 @@ export async function generateMasterImage(
 }
 
 /**
- * Renderiza o anima una escena de video con Google Omni Flash
+ * Renderiza o anima una escena de video con Veo 3.1
  */
 export async function renderSceneVideo(
   scene: Scene,
   frameworkId: string,
   masterImageUrl?: string
 ): Promise<{ videoUrl: string; latencyMs: number; isRealKeyConfigured: boolean }> {
-  const modelName = 'gemini-omni-flash-preview'; // Official Gemini API: gemini-omni-flash-preview
+  const modelName = 'veo-3.1-fast-generate-preview';
   const startTime = Date.now();
 
   const promptPayload = {
@@ -113,6 +112,7 @@ export async function renderSceneVideo(
     scene_order: scene.order,
     video_control_prompt: scene.videoControlPrompt || scene.conceptOrReaction || scene.visualPrompt,
     duration_sec: scene.durationSec,
+    has_image_conditioning: Boolean(masterImageUrl || scene.mediaUrl),
   };
 
   useLogStore.getState().addLog({
@@ -120,7 +120,7 @@ export async function renderSceneVideo(
     modelName,
     callType: 'scene_video_render',
     status: 'PENDING',
-    message: `Enviando escena #${scene.order} a Google Omni Flash (${scene.durationSec}s)...`,
+    message: `Enviando escena #${scene.order} al motor de video (${scene.durationSec}s)...`,
     requestPayload: promptPayload,
   });
 
@@ -153,8 +153,8 @@ export async function renderSceneVideo(
       callType: 'scene_video_render',
       status: data.success ? 'SUCCESS' : 'ERROR',
       message: data.isRealKeyConfigured
-        ? `Escena #${scene.order} renderizada con Google Omni Flash en ${latencyMs}ms`
-        : `Escena #${scene.order} estructurada para Omni Flash (esperando API key)`,
+        ? `Escena #${scene.order} renderizada en ${latencyMs}ms`
+        : `Escena #${scene.order} estructurada`,
       requestPayload: promptPayload,
       responsePayload: data,
       latencyMs,
